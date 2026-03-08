@@ -1,0 +1,22 @@
+# Variáveis de ambiente
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# Docker
+volumes/
+
+# SO
+.DS_Store
+Thumbs.db
