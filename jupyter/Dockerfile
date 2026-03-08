@@ -7,6 +7,7 @@ RUN pip install \
     delta-spark \
     psycopg2-binary \
     pandas \
-    sqlalchemy
+    sqlalchemy \
+    papermill
 
 USER jovyan
