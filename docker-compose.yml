@@ -64,7 +64,9 @@ services:
     command: standalone
 
   jupyter:
-    image: jupyter/pyspark-notebook:latest
+    build:
+      context: ./jupyter
+      dockerfile: Dockerfile
     container_name: cvmc-jupyter
     env_file: .env
     environment:
