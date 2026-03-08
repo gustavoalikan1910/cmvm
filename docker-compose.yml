@@ -21,6 +21,8 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
     networks:
       - cvmc-network
     restart: always
