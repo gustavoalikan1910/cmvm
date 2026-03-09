@@ -20,3 +20,4 @@ volumes/
 # SO
 .DS_Store
 Thumbs.db
+*_output.ipynb

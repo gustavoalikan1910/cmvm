@@ -7,6 +7,29 @@ networks:
 volumes:
   postgres-data:
   minio-data:
+  airflow-logs:
+
+x-airflow-common: &airflow-common
+  build:
+    context: ./airflow
+    dockerfile: Dockerfile.airflow
+  user: "0:0"
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+    AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW__CORE__FERNET_KEY}
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./airflow/config:/opt/airflow/config
+    - airflow-logs:/opt/airflow/logs
+    - /var/run/docker.sock:/var/run/docker.sock
+  depends_on:
+    - postgres
+  networks:
+    - cvmc-network
 
 services:
 
@@ -44,26 +67,31 @@ services:
       - cvmc-network
     restart: always
 
-  airflow:
-    image: apache/airflow:2.9.1
-    container_name: cvmc-airflow
-    env_file: .env
-    environment:
-      AIRFLOW__CORE__EXECUTOR: ${AIRFLOW__CORE__EXECUTOR}
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
-      AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW__CORE__FERNET_KEY}
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/plugins:/opt/airflow/plugins
-      - ./airflow/config:/opt/airflow/config
+  airflow-init:
+    <<: *airflow-common
+    container_name: cvmc-airflow-init
+    command: bash -c "/home/airflow/.local/bin/airflow db migrate && /home/airflow/.local/bin/airflow users create --username ${AIRFLOW_ADMIN_USER} --password ${AIRFLOW_ADMIN_PASSWORD} --firstname Admin --lastname CVMC --role Admin --email admin@cvmc.com || true"
+    restart: on-failure
+
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: cvmc-airflow-webserver
+    command: webserver
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
-    networks:
-      - cvmc-network
+      airflow-init:
+        condition: service_completed_successfully
     restart: always
-    command: standalone
+
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: cvmc-airflow-scheduler
+    command: scheduler
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    restart: always
 
   jupyter:
     build:
@@ -80,4 +108,3 @@ services:
     networks:
       - cvmc-network
     restart: always
-
