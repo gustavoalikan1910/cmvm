@@ -1,7 +1,9 @@
 from airflow import DAG
 from airflow.operators.bash import BashOperator
+from airflow.models.param import Param  # A classe mágica que obriga a UI a aparecer
 from datetime import datetime, timedelta
 
+# Variáveis estáticas de identificação do ficheiro e do container
 LEAGUE = "brasileirao-serie-a"
 SEASON = "2026"
 ENVIRONMENT = "prd"
@@ -21,19 +23,31 @@ def papermill_cmd(input_nb, params: dict) -> str:
 
 with DAG(
     dag_id=f"cvmc_pipeline__{LEAGUE}__{SEASON}",
-    description=f"Pipeline completo: {LEAGUE} | {SEASON}",
+    description=f"Pipeline completo: {LEAGUE} | {SEASON} parametrizado",
     schedule_interval="0 7 * * *",
-    start_date=datetime(2026, 1, 1),
+    start_date=datetime(2024, 1, 1),
     catchup=False,
     default_args=default_args,
-    tags=["cvmc", LEAGUE, SEASON],
+    # === BLINDAGEM COM Param PARA FORÇAR A INTERFACE VISUAL ===
+    params={
+        "league": Param(LEAGUE, type="string", description="Nome da Liga"),
+        "season": Param(SEASON, type="string", description="Ano da Temporada"),
+        "environment": Param(ENVIRONMENT, type="string", description="Ambiente (dev/prd)"),
+        "reproc_mode": Param("False", type="string", description="Forçar reprocessamento total da Raw? (True/False)") 
+    },
+    tags=["cvmc", LEAGUE, SEASON, "dynamic"],
 ) as dag:
 
     scraper = BashOperator(
         task_id="scraper",
         bash_command=papermill_cmd(
             "scraper/00_scrapper_statshub_data.ipynb",
-            {"LEAGUE": LEAGUE, "SEASON": SEASON, "ENVIRONMENT": ENVIRONMENT, "REPROC_MODE": False}
+            {
+                "LEAGUE": "{{ params.league }}", 
+                "SEASON": "{{ params.season }}", 
+                "ENVIRONMENT": "{{ params.environment }}", 
+                "REPROC_MODE": "{{ params.reproc_mode }}"
+            }
         ),
     )
 
@@ -41,7 +55,12 @@ with DAG(
         task_id="raw",
         bash_command=papermill_cmd(
             "transform/01_raw_data.ipynb",
-            {"LEAGUE": LEAGUE, "SEASON": SEASON, "ENVIRONMENT": ENVIRONMENT, "REPROC_MODE": False}
+            {
+                "LEAGUE": "{{ params.league }}", 
+                "SEASON": "{{ params.season }}", 
+                "ENVIRONMENT": "{{ params.environment }}", 
+                "REPROC_MODE": "{{ params.reproc_mode }}"
+            }
         ),
     )
 
@@ -49,7 +68,12 @@ with DAG(
         task_id="silver",
         bash_command=papermill_cmd(
             "transform/02_silver_data.ipynb",
-            {"LEAGUE": LEAGUE, "SEASON": SEASON, "ENVIRONMENT": ENVIRONMENT, "REPROC_MODE": False}
+            {
+                "LEAGUE": "{{ params.league }}", 
+                "SEASON": "{{ params.season }}", 
+                "ENVIRONMENT": "{{ params.environment }}", 
+                "REPROC_MODE": "{{ params.reproc_mode }}"
+            }
         ),
     )
 
@@ -57,7 +81,11 @@ with DAG(
         task_id="gold",
         bash_command=papermill_cmd(
             "transform/03_gold_data.ipynb",
-            {"LEAGUE": LEAGUE, "SEASON": SEASON, "ENVIRONMENT": ENVIRONMENT}
+            {
+                "LEAGUE": "{{ params.league }}", 
+                "SEASON": "{{ params.season }}", 
+                "ENVIRONMENT": "{{ params.environment }}"
+            }
         ),
     )
 
