@@ -2,28 +2,32 @@ export default function Home() {
   return (
     <main className="container">
       <header className="hero">
+        <div className="badge">⚽ Analytics & Engenharia Esportiva</div>
         <h1>CVMC Data Platform</h1>
-        <p>Plataforma de Engenharia de Dados para Coleta e Processamento de Dados de Futebol.</p>
+        <p>A inteligência e o detalhe por trás do esporte de alto rendimento. Processamento de dados e estatísticas do mundo do futebol ponta a ponta.</p>
         <div className="actions">
-          <a href="/login" className="btn btn-primary">Acessar Dashboard</a>
-          <a href="#arquitetura" className="btn btn-secondary">Ver Arquitetura</a>
+          <a href="/login" className="btn btn-primary">Entrar no Vestiário (Dashboard)</a>
+          <a href="#arquitetura" className="btn btn-secondary">Ver Esquema Tático</a>
         </div>
       </header>
 
       <section id="arquitetura" className="architecture-section">
-        <h2>Arquitetura do Projeto</h2>
+        <h2>Nosso Esquema Tático (Arquitetura)</h2>
         <div className="cards">
           <div className="card">
-            <h3>1. Coleta</h3>
-            <p>Jupyter Notebooks atuando como Scrapers, extraindo dados de fontes externas (HTML/APIs).</p>
+            <div className="card-icon">1</div>
+            <h3>Olheiros (Coleta)</h3>
+            <p>Jupyter Notebooks atuando como Scrapers, extraindo dados valiosos de desempenho e mercado de ligas pelo mundo.</p>
           </div>
           <div className="card">
-            <h3>2. Data Lake</h3>
-            <p>Camadas Landing, Raw e Silver armazenadas localmente no MinIO (S3-compatible) em formato Delta Lake.</p>
+            <div className="card-icon">2</div>
+            <h3>Centro de Tratamento</h3>
+            <p>O Data Lake. Camadas Landing, Raw e Silver armazenadas no MinIO refinando as estatísticas puras.</p>
           </div>
           <div className="card">
-            <h3>3. Gold & Serving</h3>
-            <p>Camada agregada Gold servida via PostgreSQL para consumo neste Dashboard e outras ferramentas.</p>
+            <div className="card-icon">3</div>
+            <h3>Camada de Elite (Gold)</h3>
+            <p>Dados consolidados e servidos pelo PostgreSQL prontos para o cruzamento de KPIs e tomada de decisão.</p>
           </div>
         </div>
       </section>
