@@ -108,3 +108,23 @@ services:
     networks:
       - cvmc-network
     restart: always
+
+  website:
+    build:
+      context: ./website
+      dockerfile: Dockerfile
+    container_name: cvmc-website
+    env_file: .env
+    environment:
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB}
+    ports:
+      - "3000:3000"
+    networks:
+      - cvmc-network
+    depends_on:
+      - postgres
+    restart: always
