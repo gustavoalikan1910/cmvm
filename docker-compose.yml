@@ -123,6 +123,10 @@ services:
       - DB_NAME=${POSTGRES_DB}
     ports:
       - "3000:3000"
+    volumes:
+      - ./website:/app
+      - /app/node_modules
+    command: npm run dev
     networks:
       - cvmc-network
     depends_on:

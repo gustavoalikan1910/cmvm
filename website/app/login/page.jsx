@@ -10,12 +10,22 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // Aqui vai entrar a request POST real para a rota de API do Next.js depois!
-    // Para efeito de protótipo de UI visual rápida:
-    if (email === 'admin@cvmc.com' && password === 'admin123') {
-      router.push('/dashboard');
-    } else {
-      setError('Credenciais inválidas.');
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        router.push('/dashboard');
+      } else {
+        setError(data.error || 'Falha na autenticação.');
+      }
+    } catch (err) {
+      setError('Falha de conexão com o servidor.');
     }
   };
 

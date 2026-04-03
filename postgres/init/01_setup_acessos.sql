@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS acessos.usuarios (
 );
 
 -- Inserindo um usuário administrador padrão (senha: admin123)
--- Hash bcrypt gerado para "admin123": $2y$10$tZ2E7oK1wzN0T.5iWb/sNuG.s/N1G.6M/n6I2t958u/C.eR/A3KcC
+-- Hash bcrypt gerado para "admin123": $2a$10$OHjjpmvB0OE10qdILmTrH.Vpt6iapFSAyvib/NCAcsgy7Lqjl4q7K
 INSERT INTO acessos.usuarios (nome, email, senha_hash)
-VALUES ('Admin Portfólio', 'admin@cvmc.com', '$2b$10$tZ2E7oK1wzN0T.5iWb/sNuG.s/N1G.6M/n6I2t958u/C.eR/A3KcC')
-ON CONFLICT (email) DO NOTHING;
+VALUES ('Admin Portfólio', 'admin@cvmc.com', '$2a$10$OHjjpmvB0OE10qdILmTrH.Vpt6iapFSAyvib/NCAcsgy7Lqjl4q7K')
+ON CONFLICT (email) DO UPDATE SET senha_hash = EXCLUDED.senha_hash;
