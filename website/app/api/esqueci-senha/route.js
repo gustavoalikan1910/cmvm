@@ -20,7 +20,7 @@ export async function POST(request) {
     await client.query('UPDATE acessos.usuarios SET token_seguranca = $1, token_expiracao = $2 WHERE email = $3', [token, expiracao, email]);
     client.release();
 
-    const link = `http://localhost:3000/definir-senha?token=${token}`;
+    const link = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/definir-senha?token=${token}`;
     
     await sendMail({
       to: email,
