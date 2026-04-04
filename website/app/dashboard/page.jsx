@@ -52,7 +52,7 @@ export default function Dashboard() {
             Utilize qualquer ferramenta (DBeaver, DataGrip, Python/Pandas) conectando-se com os dados abaixo:
           </p>
           <div style={{ background: 'rgba(0,0,0,0.5)', padding: '1.5rem', borderRadius: '0.5rem', fontFamily: 'monospace', display: 'grid', gap: '0.5rem', fontSize: '1.1rem' }}>
-            <div><span style={{ color: 'var(--text-secondary)' }}>Host:</span> localhost</div>
+            <div><span style={{ color: 'var(--text-secondary)' }}>Host:</span> {process.env.NEXT_PUBLIC_DB_EXTERNAL_HOST || 'localhost'}</div>
             <div><span style={{ color: 'var(--text-secondary)' }}>Porta:</span> 5432</div>
             <div><span style={{ color: 'var(--text-secondary)' }}>Database:</span> cvmc_data</div>
             <div><span style={{ color: 'var(--text-secondary)' }}>Schemas de Leitura:</span> silver, gold</div>
