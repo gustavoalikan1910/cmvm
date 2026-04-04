@@ -7,6 +7,8 @@ volumes:
   postgres-data:
   minio-data:
   airflow-logs:
+  certbot-conf:
+  certbot-www:
 
 x-airflow-common: &airflow-common
   build:
@@ -126,8 +128,7 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_FROM=${SMTP_FROM}
-    ports:
-      - "80:3000"
+    # Porta gerenciada pelo Nginx - nao exposta diretamente
     volumes:
       - ./website:/app
       - /app/node_modules
@@ -136,4 +137,31 @@ services:
       - cvmc-network
     depends_on:
       - postgres
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: cvmc-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - certbot-conf:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    networks:
+      - cvmc-network
+    depends_on:
+      - website
+    restart: always
+
+  certbot:
+    image: certbot/certbot
+    container_name: cvmc-certbot
+    volumes:
+      - certbot-conf:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --quiet; sleep 12h & wait $${!}; done;'"
+    networks:
+      - cvmc-network
     restart: always
