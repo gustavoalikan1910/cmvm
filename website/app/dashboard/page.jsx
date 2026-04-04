@@ -1,80 +1,54 @@
-'use client';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+
 export default function Dashboard() {
+  const cookieStore = cookies();
+  const session = cookieStore.get('cvmc_session');
+  
+  if (!session) {
+    redirect('/login');
+  }
+
+  const user = session ? JSON.parse(Buffer.from(session.value, 'base64').toString('utf8')) : null;
+  const db_user = user?.nome.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() || 'undefined';
+
   return (
-    <div className="dashboard-container">
-      <header className="dash-header">
-        <h1>Dashboard - Camada Gold</h1>
-        <a href="/" className="btn btn-secondary">Sair</a>
+    <div className="container" style={{paddingTop: '3rem'}}>
+      <header style={{display: 'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'3rem'}}>
+        <h2>Painel Analítico CVMC</h2>
+        <a href="/login" className="btn btn-secondary">Logout</a>
       </header>
 
-      <section className="kpis">
-        <div className="kpi-card">
-          <h3>Total de Partidas (Exemplo)</h3>
-          <div className="value">1,245</div>
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem'}}>
+        
+        {/* KPI Mocks */}
+        <div className="card">
+          <h3 style={{color:'var(--text-secondary)'}}>Partidas Analisadas</h3>
+          <p style={{fontSize: '3rem', fontWeight: 'bold'}}>1,425</p>
         </div>
-        <div className="kpi-card">
-          <h3>Média de Gols (Exemplo)</h3>
-          <div className="value">2.4</div>
+        <div className="card">
+          <h3 style={{color:'var(--text-secondary)'}}>Times Ativos</h3>
+          <p style={{fontSize: '3rem', fontWeight: 'bold'}}>86</p>
         </div>
-        <div className="kpi-card">
-          <h3>Times Cadastrados (Exemplo)</h3>
-          <div className="value">42</div>
-        </div>
-      </section>
 
-      <div className="chart-placeholder">
-        {/* Aqui renderizaremos um gráfico do Chart.js ou Recharts futuramente */}
-        <p>Aguardando integração com o banco Postgres para plotar gráficos.</p>
+        {/* Credenciais Postgres */}
+        <div className="card" style={{gridColumn: '1 / -1', borderLeft: '4px solid #10b981'}}>
+          <h3 style={{marginBottom:'1rem'}}>🔐 Credenciais de Acesso Direto (PostgreSQL)</h3>
+          <p style={{color:'var(--text-secondary)', marginBottom: '1.5rem'}}>
+            Seu usuário possui acesso programático garantido com regra `GRANT SELECT` nas camadas DaaS do projeto. 
+            Utilize qualquer ferramenta (DBeaver, DataGrip, Python/Pandas) conectando-se com os dados abaixo:
+          </p>
+          <div style={{background:'rgba(0,0,0,0.5)', padding:'1.5rem', borderRadius:'0.5rem', fontFamily:'monospace', display:'grid', gap:'0.5rem', fontSize:'1.1rem'}}>
+            <div><span style={{color:'var(--text-secondary)'}}>Host:</span> localhost</div>
+            <div><span style={{color:'var(--text-secondary)'}}>Porta:</span> 5432</div>
+            <div><span style={{color:'var(--text-secondary)'}}>Database:</span> airflow</div>
+            <div><span style={{color:'var(--text-secondary)'}}>Schemas de Leitura:</span> silver, gold</div>
+            <div style={{marginTop:'1rem', color:'#10b981'}}><strong>Usuário:</strong> {db_user}</div>
+            <div style={{color:'#10b981'}}><strong>Senha:</strong> ******** (Sua senha web definida)</div>
+          </div>
+        </div>
+
       </div>
-
-      <style jsx>{`
-        .dashboard-container {
-          padding: 2rem;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-        .dash-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 3rem;
-          border-bottom: 1px solid var(--card-border);
-          padding-bottom: 1rem;
-        }
-        .kpis {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 1.5rem;
-          margin-bottom: 3rem;
-        }
-        .kpi-card {
-          background: var(--card-bg);
-          padding: 2rem;
-          border-radius: 1rem;
-          border: 1px solid var(--card-border);
-          text-align: center;
-        }
-        .kpi-card h3 {
-          color: var(--text-secondary);
-          font-size: 1rem;
-          margin-bottom: 0.5rem;
-        }
-        .kpi-card .value {
-          font-size: 2.5rem;
-          font-weight: bold;
-          color: var(--accent-color);
-        }
-        .chart-placeholder {
-          background: rgba(0,0,0,0.2);
-          border: 1px dashed var(--text-secondary);
-          height: 400px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 1rem;
-          color: var(--text-secondary);
-        }
-      `}</style>
     </div>
   );
 }

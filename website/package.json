@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "next": "14.2.3",
+    "nodemailer": "^8.0.4",
+    "pg": "^8.11.5",
     "react": "^18",
     "react-dom": "^18",
-    "pg": "^8.11.5",
-    "bcryptjs": "^2.4.3"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "eslint": "^8",

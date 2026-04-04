@@ -3,32 +3,51 @@ export default function Home() {
     <main className="container">
       <header className="hero">
         <div className="badge">⚽ Analytics & Engenharia Esportiva</div>
-        <h1>CVMC Data Platform</h1>
+        <h1>SOCCER DATA PLATFORM</h1>
         <p>A inteligência e o detalhe por trás do esporte de alto rendimento. Processamento de dados e estatísticas do mundo do futebol ponta a ponta.</p>
-        <div className="actions">
-          <a href="/login" className="btn btn-primary">Entrar no Vestiário (Dashboard)</a>
-          <a href="#arquitetura" className="btn btn-secondary">Ver Esquema Tático</a>
+        <div className="actions" style={{ flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+          <span style={{ fontSize: '1.1rem', color: 'var(--text-secondary)' }}>Crie sua conta gratuitamente para ter acesso ao database</span>
+          <a href="/cadastro" className="btn btn-primary">Criar Conta</a>
+          {/* Dashboard desativado temporariamente da Home */}
+          {/* <a href="/login" className="btn btn-secondary">Entrar no Vestiário</a> */}
         </div>
       </header>
 
+
       <section id="arquitetura" className="architecture-section">
-        <h2>Nosso Esquema Tático (Arquitetura)</h2>
-        <div className="cards">
-          <div className="card">
-            <div className="card-icon">1</div>
-            <h3>Olheiros (Coleta)</h3>
-            <p>Jupyter Notebooks atuando como Scrapers, extraindo dados valiosos de desempenho e mercado de ligas pelo mundo.</p>
+        <h2>Fluxograma do Processo</h2>
+        <div className="flowchart">
+
+          <div className="flow-step">
+            <div className="icon">🕸️</div>
+            <h3>1. Coleta (Scraping)</h3>
+            <p>Jupyter Notebooks atuam na web como olheiros, buscando estatísticas de ligas em tempo real.</p>
           </div>
-          <div className="card">
-            <div className="card-icon">2</div>
-            <h3>Centro de Tratamento</h3>
-            <p>O Data Lake. Camadas Landing, Raw e Silver armazenadas no MinIO refinando as estatísticas puras.</p>
+
+          <div className="flow-arrow">⬇️</div>
+
+          <div className="flow-step">
+            <div className="icon">🪣</div>
+            <h3>2. Landing Layer</h3>
+            <p>Os dados brutos chegam sem tratamento no Data Lake em MinIO.</p>
           </div>
-          <div className="card">
-            <div className="card-icon">3</div>
-            <h3>Camada de Elite (Gold)</h3>
-            <p>Dados consolidados e servidos pelo PostgreSQL prontos para o cruzamento de KPIs e tomada de decisão.</p>
+
+          <div className="flow-arrow">⬇️</div>
+
+          <div className="flow-step">
+            <div className="icon">⚙️</div>
+            <h3>3. Silver Layer</h3>
+            <p>Os dados são limpos e consolidados em tabelas estruturadas (disponível via PostgreSQL).</p>
           </div>
+
+          <div className="flow-arrow">⬇️</div>
+
+          <div className="flow-step highlight-step">
+            <div className="icon">🏆</div>
+            <h3>4. Gold Layer (Serviço)</h3>
+            <p>O PostgreSQL expõe a camada analítica perfeitamente pronta para o seu negócio!</p>
+          </div>
+
         </div>
       </section>
     </main>

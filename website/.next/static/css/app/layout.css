@@ -180,3 +180,57 @@ h2 {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Flowchart Styles */
+.flowchart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.flow-step {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.flow-step:hover {
+  transform: scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.flow-step .icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.flow-arrow {
+  font-size: 2rem;
+  opacity: 0.5;
+  animation: bounce 2s infinite;
+}
+
+.highlight-step {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.highlight-step:hover {
+  border-color: #10b981;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+

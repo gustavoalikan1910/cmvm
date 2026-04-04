@@ -45,6 +45,10 @@ export default function Login() {
           </div>
           <button type="submit" className="btn btn-primary login-btn">Entrar</button>
         </form>
+        <div style={{marginTop:'1.5rem', display:'flex', justifyContent:'space-between', fontSize:'0.9rem'}}>
+          <a href="/esqueci-senha" style={{color:'var(--text-secondary)'}}>Esqueci minha senha</a>
+          <a href="/cadastro" style={{color:'var(--text-secondary)'}}>Criar conta</a>
+        </div>
       </div>
       <style jsx>{`
         .login-container {
