@@ -29,7 +29,7 @@ export async function POST(request) {
       const roleExists = await client.query(`SELECT 1 FROM pg_roles WHERE rolname='${sanitizedUser}'`);
       if(roleExists.rows.length === 0) {
         await client.query(`CREATE ROLE ${sanitizedUser} WITH LOGIN PASSWORD '${pwd}'`);
-        await client.query(`GRANT CONNECT ON DATABASE airflow TO ${sanitizedUser}`);
+        await client.query(`GRANT CONNECT ON DATABASE ${process.env.DB_NAME || 'cvmc_data'} TO ${sanitizedUser}`);
         // Libera schema silver
         await client.query(`GRANT USAGE ON SCHEMA silver TO ${sanitizedUser}`);
         await client.query(`GRANT SELECT ON ALL TABLES IN SCHEMA silver TO ${sanitizedUser}`);
