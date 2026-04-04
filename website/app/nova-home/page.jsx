@@ -1,6 +1,6 @@
 export default function NovaHome() {
   return (
-    <main className="min-h-screen bg-[#050505] text-white selection:bg-emerald-500 selection:text-white relative overflow-hidden font-sans">
+    <main className="min-h-screen bg-[#050505] text-white selection:bg-gray-500 selection:text-white relative overflow-hidden font-sans">
       {/* Injeção do Tailwind via CDN exclusiva para esta página de demonstração */}
       <script src="https://cdn.tailwindcss.com"></script>
       <script dangerouslySetInnerHTML={{
@@ -30,9 +30,9 @@ export default function NovaHome() {
         }
       `}} />
 
-      {/* Efeitos de Luz no Fundo (Ambient Glows) */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-emerald-600/20 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
+      {/* Efeitos de Luz no Fundo (Ambient Glows) - Agora em tons de cinza/branco sutil */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-gray-600/20 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-gray-500/10 blur-[120px] rounded-full pointer-events-none" />
 
       {/* Grid Background */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
@@ -42,15 +42,15 @@ export default function NovaHome() {
         
         {/* Hero Section */}
         <header className="pt-32 pb-24 text-center animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8 text-sm font-medium text-emerald-400">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8 text-sm font-medium text-gray-300">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-gray-300"></span>
             </span>
             Engenharia e Análise Esportiva
           </div>
           
-          <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500">
+          <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-600">
             SOCCER DATA PLATFORM
           </h1>
           
@@ -59,7 +59,7 @@ export default function NovaHome() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="/cadastro" className="group relative px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+            <a href="/cadastro" className="group relative px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
               Criar Conta Gratuita
               <span className="absolute inset-0 rounded-lg ring-2 ring-white/50 group-hover:animate-ping opacity-0 group-hover:opacity-100 transition-opacity"></span>
             </a>
@@ -117,16 +117,16 @@ export default function NovaHome() {
 
             <div className="text-3xl text-gray-600 animate-bounce-slow">↓</div>
 
-            {/* Step 4 (Highlight) */}
-            <div className="w-full bg-emerald-500/10 border border-emerald-500/30 p-8 rounded-2xl backdrop-blur-lg hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all group relative overflow-hidden shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+            {/* Step 4 (Highlight) - Alterado para tema cinza e borda branca */}
+            <div className="w-full bg-gray-500/10 border border-gray-500/40 p-8 rounded-2xl backdrop-blur-lg hover:bg-gray-500/20 hover:border-gray-400 transition-all group relative overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)]">
               {/* Highlight Glow inside card */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 blur-3xl rounded-full"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gray-400/20 blur-3xl rounded-full"></div>
               
               <div className="flex items-center gap-6 relative z-10">
-                <div className="text-4xl bg-emerald-500/20 text-emerald-400 p-4 rounded-xl group-hover:scale-110 transition-transform">🏆</div>
+                <div className="text-4xl bg-white/10 text-white p-4 rounded-xl group-hover:scale-110 transition-transform">🏆</div>
                 <div>
-                  <h3 className="text-xl font-bold mb-2 text-emerald-400">4. Gold Layer (Serviço)</h3>
-                  <p className="text-emerald-100/70">O PostgreSQL expõe a camada analítica perfeitamente pronta para o seu negócio e tomada de decisão.</p>
+                  <h3 className="text-xl font-bold mb-2 text-white">4. Gold Layer (Serviço)</h3>
+                  <p className="text-gray-300">O PostgreSQL expõe a camada analítica perfeitamente pronta para o seu negócio e tomada de decisão.</p>
                 </div>
               </div>
             </div>
