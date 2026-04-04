@@ -128,7 +128,9 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_FROM=${SMTP_FROM}
-    # Porta gerenciada pelo Nginx - nao exposta diretamente
+    # Porta exposta para testes locais. Em prod, o nginx acessa internamente
+    ports:
+      - "127.0.0.1:3000:3000"
     volumes:
       - ./website:/app
       - /app/node_modules

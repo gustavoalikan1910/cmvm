@@ -9,13 +9,26 @@ export default function Dashboard() {
     redirect('/login');
   }
 
-  const user = session ? JSON.parse(Buffer.from(session.value, 'base64').toString('utf8')) : null;
-  const db_user = user?.nome.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() || 'undefined';
+  let user = null;
+  if (session) {
+    try {
+      // O JWT é composto por 3 partes separadas por ponto (header.payload.signature)
+      // Extraímos apenas o meio (payload), decodificamos de Base64 URL e lemos o JSON
+      const base64Url = session.value.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = Buffer.from(base64, 'base64').toString('utf8');
+      user = JSON.parse(jsonPayload);
+    } catch {
+      user = null;
+    }
+  }
+
+  const db_user = user?.nome?.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() || 'undefined';
 
   return (
     <div className="container" style={{ paddingTop: '3rem' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-        <h2>Bem-vindo, {user?.db_user}!</h2>
+        <h2>Bem-vindo, {user?.nome}!</h2>
         <a href="/login" className="btn btn-secondary">Logout</a>
       </header>
 
@@ -41,7 +54,7 @@ export default function Dashboard() {
           <div style={{ background: 'rgba(0,0,0,0.5)', padding: '1.5rem', borderRadius: '0.5rem', fontFamily: 'monospace', display: 'grid', gap: '0.5rem', fontSize: '1.1rem' }}>
             <div><span style={{ color: 'var(--text-secondary)' }}>Host:</span> localhost</div>
             <div><span style={{ color: 'var(--text-secondary)' }}>Porta:</span> 5432</div>
-            <div><span style={{ color: 'var(--text-secondary)' }}>Database:</span> airflow</div>
+            <div><span style={{ color: 'var(--text-secondary)' }}>Database:</span> cvmc_data</div>
             <div><span style={{ color: 'var(--text-secondary)' }}>Schemas de Leitura:</span> silver, gold</div>
             <div style={{ marginTop: '1rem', color: '#10b981' }}><strong>Usuário:</strong> {db_user}</div>
             <div style={{ color: '#10b981' }}><strong>Senha:</strong> ******** (Sua senha web definida)</div>
