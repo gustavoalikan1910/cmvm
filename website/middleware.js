@@ -8,7 +8,7 @@ function base64UrlDecode(str) {
   return Buffer.from(str, 'base64').toString('utf8');
 }
 
-function verifyJWT(token) {
+async function verifyJWT(token) {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
@@ -19,22 +19,39 @@ function verifyJWT(token) {
     // Verifica expiração
     if (payload.exp && Date.now() / 1000 > payload.exp) return null;
 
-    // Verifica assinatura via HMAC-SHA256
-    const crypto = require('crypto');
-    const signature = crypto
-      .createHmac('sha256', JWT_SECRET)
-      .update(`${parts[0]}.${parts[1]}`)
-      .digest('base64url');
+    // Verifica assinatura via Web Crypto API (compatível com Edge Runtime)
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(JWT_SECRET),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['verify']
+    );
 
-    if (signature !== parts[2]) return null;
+    // O token assinado foi feito com node crypto createHmac, cuja saída base64url é a assinatura.
+    // Para verificar com Web Crypto, precisamos decodificar a string base64url da assinatura
+    // para um Uint8Array (ArrayBuffer).
+    const signatureStr = parts[2].replace(/-/g, '+').replace(/_/g, '/');
+    const signatureBytes = Uint8Array.from(atob(signatureStr), c => c.charCodeAt(0));
+    const dataBytes = encoder.encode(`${parts[0]}.${parts[1]}`);
+
+    const isValid = await crypto.subtle.verify(
+      'HMAC',
+      key,
+      signatureBytes,
+      dataBytes
+    );
+
+    if (!isValid) return null;
 
     return payload;
-  } catch {
+  } catch (err) {
     return null;
   }
 }
 
-export function middleware(request) {
+export async function middleware(request) {
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     const sessionCookie = request.cookies.get('cvmc_session');
 
@@ -42,7 +59,7 @@ export function middleware(request) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    const payload = verifyJWT(sessionCookie.value);
+    const payload = await verifyJWT(sessionCookie.value);
     if (!payload) {
       const response = NextResponse.redirect(new URL('/login', request.url));
       response.cookies.delete('cvmc_session');
