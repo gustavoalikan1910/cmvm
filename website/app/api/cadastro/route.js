@@ -26,7 +26,7 @@ export async function POST(request) {
     );
     client.release();
 
-    const link = `http://localhost:3000/definir-senha?token=${token}`;
+    const link = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/definir-senha?token=${token}`;
     
     // Dispara e-mail falso pro console via Ethereal
     await sendMail({
