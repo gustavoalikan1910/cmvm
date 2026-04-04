@@ -2,14 +2,15 @@ export default function Home() {
   return (
     <main className="container">
       <header className="hero">
-        <div className="badge">⚽ Analytics & Engenharia Esportiva</div>
+        <div className="badge">⚽ Engenharia e Análise Esportiva</div>
         <h1>SOCCER DATA PLATFORM</h1>
         <p>A inteligência e o detalhe por trás do esporte de alto rendimento. Processamento de dados e estatísticas do mundo do futebol ponta a ponta.</p>
         <div className="actions" style={{ flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
           <span style={{ fontSize: '1.1rem', color: 'var(--text-secondary)' }}>Crie sua conta gratuitamente para ter acesso ao database</span>
-          <a href="/cadastro" className="btn btn-primary">Criar Conta</a>
-          {/* Dashboard desativado temporariamente da Home */}
-          {/* <a href="/login" className="btn btn-secondary">Entrar no Vestiário</a> */}
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <a href="/cadastro" className="btn btn-primary">Criar Conta</a>
+            <a href="/login" className="btn btn-secondary">Entrar no Sistema</a>
+          </div>
         </div>
       </header>
 

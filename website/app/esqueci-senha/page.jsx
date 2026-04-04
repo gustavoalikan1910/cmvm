@@ -14,15 +14,17 @@ export default function EsqueciSenha() {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
-      setMensagem('Se o e-mail existir no banco, o link foi gerado e disparado no terminal Nodemailer. Verifique lá!');
-    } catch (err) {}
+      setMensagem('Se o e-mail estiver cadastrado, acabamos de enviar um link oficial de recuperação para a sua caixa de entrada principal/spam.');
+    } catch (err) {
+      setMensagem('Erro de conexão ao servidor de Recuperação.');
+    }
     setLoading(false);
   };
 
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2>Recuperação DaaS</h2>
+        <h2>Recuperar Senha</h2>
         {mensagem && <div className="success-msg" style={{color:'#10b981', marginBottom:'1rem'}}>{mensagem}</div>}
         
         <form onSubmit={submit} className="login-form">

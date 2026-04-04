@@ -32,23 +32,23 @@ function PasswordForm() {
     setLoading(false);
   };
 
-  if (!token) return <div style={{textAlign:'center', marginTop:'3rem'}}>Link inválido: Token ausente na URL.</div>;
+  if (!token) return <div style={{ textAlign: 'center', marginTop: '3rem' }}>Link inválido: Token ausente na URL.</div>;
 
   return (
     <div className="login-card">
-        <h2>Definir Nova Senha de Banco</h2>
-        {mensagem && <div className="success-msg" style={{color:'#10b981', marginBottom:'1rem'}}>{mensagem}</div>}
-        {erro && <div className="error-msg">{erro}</div>}
-        
-        <form onSubmit={submit} className="login-form">
-          <div className="form-group">
-            <label>Nova Senha (Segura)</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-          </div>
-          <button type="submit" disabled={loading} className="btn btn-primary login-btn">
-            {loading ? 'Executando script no servidor...' : 'Carregar Roles do Postgres'}
-          </button>
-        </form>
+      <h2>Definir Nova Senha de Banco</h2>
+      {mensagem && <div className="success-msg" style={{ color: '#10b981', marginBottom: '1rem' }}>{mensagem}</div>}
+      {erro && <div className="error-msg">{erro}</div>}
+
+      <form onSubmit={submit} className="login-form">
+        <div className="form-group">
+          <label>Nova Senha (Segura)</label>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+        </div>
+        <button type="submit" disabled={loading} className="btn btn-primary login-btn">
+          {loading ? 'Executando script no servidor...' : 'Redefinir Senha'}
+        </button>
+      </form>
     </div>
   );
 }
@@ -57,7 +57,7 @@ export default function DefinirSenha() {
   return (
     <div className="login-container">
       <Suspense fallback={<div>Carregando link dinâmico...</div>}>
-         <PasswordForm />
+        <PasswordForm />
       </Suspense>
       <style jsx>{`
         .login-container { display: flex; align-items: center; justify-content: center; height: 100vh; }

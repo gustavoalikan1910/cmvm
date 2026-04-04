@@ -18,7 +18,7 @@ export default function Cadastro() {
       });
       const data = await res.json();
       if (res.ok) {
-        setMensagem('Verifique o servidor Docker local ou a URL gerada pelo Ethereal Mail para acessar o link de ativar sua senha!');
+        setMensagem('Cadastro iniciado! Verifique a sua caixa de entrada real (ou o Anti-Spam) para o e-mail oficial.');
       } else {
         setErro(data.error);
       }
@@ -32,9 +32,9 @@ export default function Cadastro() {
     <div className="login-container">
       <div className="login-card">
         <h2>Criar Conta DaaS CVMC</h2>
-        {mensagem && <div className="success-msg" style={{color:'#10b981', marginBottom:'1rem'}}>{mensagem}</div>}
+        {mensagem && <div className="success-msg" style={{ color: '#10b981', marginBottom: '1rem' }}>{mensagem}</div>}
         {erro && <div className="error-msg">{erro}</div>}
-        
+
         <form onSubmit={submit} className="login-form">
           <div className="form-group">
             <label>Username</label>
@@ -48,8 +48,8 @@ export default function Cadastro() {
             {loading ? 'Provisionando...' : 'Criar Conta Mestra'}
           </button>
         </form>
-        <div style={{marginTop:'1.5rem', textAlign:'center', fontSize:'0.9rem'}}>
-          <a href="/login" style={{color:'var(--text-secondary)'}}>Já tem banco criado? Entrar no sistema</a>
+        <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.9rem' }}>
+          <a href="/login" style={{ color: 'var(--text-secondary)' }}>Já tem credenciais criadas? Entrar no sistema</a>
         </div>
       </div>
       <style jsx>{`

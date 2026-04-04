@@ -1,30 +1,28 @@
 import nodemailer from 'nodemailer';
 
 export async function sendMail({ to, subject, html }) {
-    // Cria uma conta de teste descartável (Ethereal Email) sempre que formos enviar para ambiente DEV
-    let testAccount = await nodemailer.createTestAccount();
-    
+    // Utilizando conexão SMTP real validada através do Brevo configurada no Docker Compose
     let transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false,
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT) || 587,
+        secure: false, // true para 465, false para 587
         auth: {
-            user: testAccount.user,
-            pass: testAccount.pass,
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASSWORD,
         },
     });
 
     let info = await transporter.sendMail({
-        from: '"CVMC Data Platform DaaS" <admin@cvmc.com>',
+        from: `"CVMC Data Platform DaaS" <${process.env.SMTP_FROM}>`,
         to,
         subject,
         html,
     });
 
-    console.log("---- NOVO E-MAIL MOCKADO ENVIADO ----");
-    console.log("ASSUNTO: %s", info.subject);
-    console.log("URL de Pré-visualização do Mock E-mail (CLIQUE AQUI PARA LER): %s", nodemailer.getTestMessageUrl(info));
-    console.log("-----------------------------------------");
+    console.log("---- DISPARO DE E-MAIL REAL EFETUADO COM SUCESSO ----");
+    console.log("Mensagem ID: %s", info.messageId);
+    console.log("Destinatário: %s", to);
+    console.log("-----------------------------------------------------");
 
     return info;
 }
