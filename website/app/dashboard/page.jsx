@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import AIChat from './AIChat';
 
 export default function Dashboard() {
   const cookieStore = cookies();
@@ -60,6 +61,9 @@ export default function Dashboard() {
             <div style={{ color: '#10b981' }}><strong>Senha:</strong> ******** (Sua senha web definida)</div>
           </div>
         </div>
+
+        {/* AI Chat Agent */}
+        <AIChat />
 
       </div>
     </div>
