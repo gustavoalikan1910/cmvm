@@ -122,6 +122,9 @@ services:
       - "18789:18789"
     volumes:
       - openclaw-manual-data:/root/.openclaw
+    environment:
+      # Injeta a chave do OpenRouter direto no cérebro do container
+      - OPENROUTER_API_KEY=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
     networks:
       - cvmc-network
     depends_on:
