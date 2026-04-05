@@ -8,6 +8,7 @@ volumes:
   airflow-logs:
   certbot-conf:
   certbot-www:
+  openclaw-manual-data:
 
 x-airflow-common: &airflow-common
   build:
@@ -110,6 +111,23 @@ services:
       - cvmc-network
     restart: always
 
+  openclaw:
+    build:
+      context: ./openclaw-manual
+      dockerfile: Dockerfile
+    container_name: cvmc-openclaw
+    tty: true
+    stdin_open: true
+    ports:
+      - "18789:18789"
+    volumes:
+      - openclaw-manual-data:/root/.openclaw
+    networks:
+      - cvmc-network
+    depends_on:
+      - postgres
+    restart: always
+
   website:
     build:
       context: ./website
@@ -166,4 +184,3 @@ services:
     networks:
       - cvmc-network
     restart: always
-
