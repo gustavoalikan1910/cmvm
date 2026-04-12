@@ -23,15 +23,8 @@ export default function Home() {
           </div>
           
           <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent flex flex-col md:flex-row items-center justify-center gap-6">
-            <svg viewBox="0 0 100 100" className="w-20 h-20 md:w-32 md:h-32 fill-white opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" xmlns="http://www.w3.org/2000/svg">
-              {/* C Clássico */}
-              <path d="M42 30c-8 0-14 6-14 14v12c0 8 6 14 14 14h6v-8h-6c-3 0-6-3-6-6v-12c0-3 3-6 6-6h6v-8h-6z"/>
-              {/* P Clássico acoplado */}
-              <path d="M52 30v40h8V54h6c8 0 14-6 14-14s-6-14-14-14H52zm8 8h6c3 0 6 3 6 6s-3 6-6 6h-6V38z"/>
-              {/* Círculo de borda minimalista */}
-              <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="opacity-20" />
-            </svg>
-            <span className="leading-none">COMO VAI O MEU<br className="hidden md:block" /> CORINTHIANS?</span>
+            <img src="/assets/simbolo_CP.png" alt="Corinthians" className="w-20 h-20 md:w-32 md:h-32 object-contain brightness-0 invert opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
+            <span className="leading-none text-center md:text-left">COMO VAI O MEU<br className="hidden md:block" /> CORINTHIANS?</span>
           </h1>
           
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
