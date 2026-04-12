@@ -77,9 +77,6 @@ export default function Home() {
           {/* Card 2: Silver Layer (Small) */}
           <div className="md:col-span-4 bento-card border-emerald-500/20">
             <h3 className="text-xl font-bold mb-2">02. Silver Layer</h3>
-            <p className="text-sm text-gray-400 mb-2 font-mono">
-              [Tratamento de duplicidades, normalização de dados e garantia de integridade]
-            </p>
             <p className="text-sm text-gray-500">
               Tratamento de schema, deduplicação e normalização SQL pura. 
               Garantia de integridade para análise.
