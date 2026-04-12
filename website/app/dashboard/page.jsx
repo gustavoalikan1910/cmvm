@@ -42,10 +42,10 @@ export default function Dashboard() {
         </a>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[180px]">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
 
         {/* KPI 1 */}
-        <div className="md:col-span-4 bento-card flex flex-col justify-between group">
+        <div className="md:col-span-4 bento-card min-h-[180px] flex flex-col justify-between group">
           <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Matches Scanned</div>
           <div className="text-5xl font-black text-white group-hover:scale-105 transition-transform origin-left">1,425</div>
           <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
@@ -54,14 +54,14 @@ export default function Dashboard() {
         </div>
 
         {/* KPI 2 */}
-        <div className="md:col-span-4 bento-card flex flex-col justify-between group">
+        <div className="md:col-span-4 bento-card min-h-[180px] flex flex-col justify-between group">
           <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Active Teams</div>
           <div className="text-5xl font-black text-white group-hover:scale-105 transition-transform origin-left">86</div>
           <div className="text-[10px] text-gray-600">Cross-referenced across 4 leagues</div>
         </div>
 
         {/* KPI 3 */}
-        <div className="md:col-span-4 bento-card flex flex-col justify-between bg-emerald-500/5 border-emerald-500/20">
+        <div className="md:col-span-4 bento-card min-h-[180px] flex flex-col justify-between bg-emerald-500/5 border-emerald-500/20">
           <div className="text-[10px] uppercase tracking-widest text-emerald-500/50 font-bold">DaaS Status</div>
           <div className="text-3xl font-black text-emerald-400">OPERATIONAL</div>
           <div className="flex gap-1">
