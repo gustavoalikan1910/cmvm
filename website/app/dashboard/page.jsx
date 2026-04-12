@@ -82,7 +82,6 @@ export default function Dashboard() {
             </p>
             
             <div className="bg-black/40 border border-white/10 rounded-3xl p-8 font-mono text-sm relative overflow-hidden group">
-               <div className="absolute top-0 right-0 p-6 opacity-5 text-5xl font-black uppercase pointer-events-none">Postgres</div>
                <div className="space-y-4 relative z-10">
                   <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
                     <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Cluster Host</span>
