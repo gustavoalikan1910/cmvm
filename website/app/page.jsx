@@ -1,6 +1,21 @@
 import React from 'react';
+import pool from '@/lib/db';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  let isPipelineActive = false;
+  try {
+    const result = await pool.query(
+      "SELECT state FROM dag_run WHERE dag_id = 'cvmc_pipeline__brasileirao-serie-a__2026' ORDER BY execution_date DESC LIMIT 1"
+    );
+    if (result.rows.length > 0 && result.rows[0].state === 'success') {
+      isPipelineActive = true;
+    }
+  } catch (error) {
+    console.error('Failed to fetch pipeline status:', error);
+  }
+
   return (
     <main className="min-h-screen relative">
       {/* Background Decor */}
@@ -50,7 +65,9 @@ export default function Home() {
           <div className="md:col-span-8 bento-card group">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-2xl font-bold">01. Ingestão Distribuída</h3>
-              <div className="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">Active</div>
+              <div className={`text-xs font-mono px-2 py-1 rounded ${isPipelineActive ? 'text-emerald-400 bg-emerald-400/10' : 'text-red-400 bg-red-400/10'}`}>
+                {isPipelineActive ? 'Active' : 'Inactive'}
+              </div>
             </div>
             <p className="text-gray-400 max-w-md mb-8">
               Notebooks Jupyter orquestrados pelo Airflow que realizam o scraping simultâneos, injetando dados brutos na Landing Layer (MinIO).
