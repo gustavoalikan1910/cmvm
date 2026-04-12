@@ -22,9 +22,10 @@ export default function Home() {
             Production Ready: Data Pipeline v2.4
           </div>
           
-          <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent flex flex-col md:flex-row items-center justify-center gap-6">
-            <img src="/assets/simbolo_CP.png" alt="Corinthians" className="w-20 h-20 md:w-32 md:h-32 object-contain brightness-0 invert opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
-            <span className="leading-none text-center md:text-left">COMO VAI O MEU<br className="hidden md:block" /> CORINTHIANS?</span>
+          <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
+            <img src="/assets/simbolo_CP.png" alt="Corinthians" className="w-16 h-16 md:w-28 md:h-28 object-contain brightness-0 invert opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
+            <span className="leading-none text-center">COMO VAI O MEU<br className="hidden md:block" /> CORINTHIANS?</span>
+            <img src="/assets/simbolo_CP.png" alt="Corinthians" className="w-16 h-16 md:w-28 md:h-28 object-contain brightness-0 invert opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] hidden md:block" />
           </h1>
           
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
