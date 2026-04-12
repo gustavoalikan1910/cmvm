@@ -35,7 +35,7 @@ export default function Home() {
 
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/login" className="px-8 py-4 bg-white text-black font-bold rounded-2xl hover:scale-105 transition-transform">
-              Acessar Dashboard
+              Acessar banco de dados
             </a>
             <a href="#architecture" className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/10 transition-colors">
               Explorar Arquitetura
@@ -76,8 +76,10 @@ export default function Home() {
 
           {/* Card 2: Silver Layer (Small) */}
           <div className="md:col-span-4 bento-card border-emerald-500/20">
-            <div className="text-3xl mb-4">⚙️</div>
-            <h3 className="text-xl font-bold mb-2">Silver Layer</h3>
+            <h3 className="text-xl font-bold mb-2">02. Silver Layer</h3>
+            <p className="text-sm text-gray-400 mb-2 font-mono">
+              [Tratamento de duplicidades, normalização de dados e garantia de integridade]
+            </p>
             <p className="text-sm text-gray-500">
               Tratamento de schema, deduplicação e normalização SQL pura. 
               Garantia de integridade para análise.
@@ -88,10 +90,16 @@ export default function Home() {
           <div className="md:col-span-4 bento-card">
             <div className="flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-xl font-bold mb-2">Core Engine</h3>
-                <p className="text-sm text-gray-500 italic">PostgreSQL (Camada Gold)</p>
+                <h3 className="text-xl font-bold mb-2">03. Gold Analytics</h3>
+                <p className="text-sm text-gray-500 italic mb-4">PostgreSQL (Camada Gold)</p>
+                <ul className="text-xs text-gray-400 space-y-1 font-mono">
+                  <li>• obt_team_season_stats</li>
+                  <li>• obt_team_match_stats</li>
+                  <li>• obt_player_season_stats</li>
+                  <li>• obt_player_match_stats</li>
+                </ul>
               </div>
-              <div className="text-6xl font-black text-white/5 select-none self-end">SQL</div>
+              <div className="text-6xl font-black text-white/5 select-none self-end mt-4">SQL</div>
             </div>
           </div>
 
