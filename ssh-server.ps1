@@ -2,7 +2,7 @@
 # Uso: .\ssh-server.ps1
 # Ou via workflow Antigravity: /ssh
 
-$KEY = "C:\Users\gufev\Downloads\private_key_oracle.ppk"
+$KEY = "C:\Users\GustavoAlikanFeverei\Downloads\private_key_oracle.ppk"
 $SSH_HOST = "ubuntu@163.176.241.242"
 $PLINK = "C:\Program Files\PuTTY\plink.exe"
 
