@@ -23,11 +23,11 @@ export default function Home() {
           </div>
           
           <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
-            CVMC DATA<br />INTELLECTUAL
+            COMO VAI O MEU<br />CORINTHIANS?
           </h1>
           
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
-            A infraestrutura de dados por trás das decisões táticas. 
+            Estrutura de dados desenvolvida para mensurar estatísticas do todo poderoso timão. 
             Uma plataforma Medalhão escalável para inteligência esportiva.
           </p>
 
@@ -51,10 +51,10 @@ export default function Home() {
               <div className="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">Active</div>
             </div>
             <p className="text-gray-400 max-w-md mb-8">
-              Notebooks Jupyter orquestrados pelo Airflow realizam o scraping de +40 ligas simultâneas, injetando dados brutos na Landing Layer (MinIO).
+              Notebooks Jupyter orquestrados pelo Airflow que realizam o scraping simultâneos, injetando dados brutos na Landing Layer (MinIO).
             </p>
             <div className="flex gap-3">
-              {['Python', 'Selenium', 'Jupyter', 'Airflow'].map(tech => (
+              {['Python', 'Spark', 'Jupyter', 'Airflow'].map(tech => (
                 <span key={tech} className="text-[10px] uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full">{tech}</span>
               ))}
             </div>
