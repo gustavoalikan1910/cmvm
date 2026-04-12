@@ -21,32 +21,61 @@ function PasswordForm() {
       });
       const data = await res.json();
       if (res.ok) {
-        setMensagem('Tudo certo! Redirecionando a página...');
+        setMensagem('Protocolo aceito! Redirecionando...');
         setTimeout(() => router.push('/login'), 2500);
       } else {
         setErro(data.error);
       }
     } catch (err) {
-      setErro('Erro de conexão ao ativar banco.');
+      setErro('Erro de conexão ao servidor.');
     }
     setLoading(false);
   };
 
-  if (!token) return <div style={{ textAlign: 'center', marginTop: '3rem' }}>Link inválido: Token ausente na URL.</div>;
+  if (!token) return (
+    <div className="text-center p-8 bento-card">
+       <div className="text-red-400 font-bold mb-4 uppercase tracking-widest text-xs">Access Denied</div>
+       <p className="text-gray-500 text-sm">Security token missing or invalid.</p>
+    </div>
+  );
 
   return (
-    <div className="login-card">
-      <h2>Definir Nova Senha de Banco</h2>
-      {mensagem && <div className="success-msg" style={{ color: '#10b981', marginBottom: '1rem' }}>{mensagem}</div>}
-      {erro && <div className="error-msg">{erro}</div>}
+    <div className="w-full max-w-md p-8 bento-card shadow-2xl relative animate-fade-in-up">
+      <div className="text-center mb-10">
+          <h2 className="text-3xl font-black tracking-tighter bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
+            INITIALIZE KEY
+          </h2>
+          <p className="text-gray-500 mt-2 text-xs uppercase tracking-widest">
+            Define your encryption password
+          </p>
+      </div>
 
-      <form onSubmit={submit} className="login-form">
-        <div className="form-group">
-          <label>Nova Senha (Segura)</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+      {mensagem && (
+        <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] uppercase tracking-widest text-center rounded-2xl">
+          {mensagem}
         </div>
-        <button type="submit" disabled={loading} className="btn btn-primary login-btn">
-          {loading ? 'Executando script no servidor...' : 'Redefinir Senha'}
+      )}
+      
+      {erro && (
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] uppercase tracking-widest text-center rounded-2xl">
+          {erro}
+        </div>
+      )}
+
+      <form onSubmit={submit} className="space-y-6">
+        <div className="space-y-2">
+          <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500 ml-1">New Secure Key</label>
+          <input 
+            type="password" 
+            value={password} 
+            onChange={e => setPassword(e.target.value)} 
+            required 
+            className="w-full px-5 py-4 bg-white/[0.02] border border-white/10 rounded-2xl text-white placeholder-gray-700 focus:outline-none focus:border-white/30 transition-all text-sm"
+            placeholder="••••••••"
+          />
+        </div>
+        <button type="submit" disabled={loading} className={`w-full py-5 text-[11px] uppercase tracking-[0.2em] font-black rounded-2xl transition-all duration-300 ${loading ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-white text-black hover:bg-gray-200 hover:scale-[1.01] shadow-[0_0_30px_rgba(255,255,255,0.1)]'}`}>
+          {loading ? 'Initializing...' : 'Save Protocol'}
         </button>
       </form>
     </div>
@@ -55,19 +84,10 @@ function PasswordForm() {
 
 export default function DefinirSenha() {
   return (
-    <div className="login-container">
-      <Suspense fallback={<div>Carregando link dinâmico...</div>}>
+    <div className="min-h-screen flex items-center justify-center px-6">
+      <Suspense fallback={<div className="text-gray-500 text-[10px] uppercase tracking-widest animate-pulse">Establishing Connection...</div>}>
         <PasswordForm />
       </Suspense>
-      <style jsx>{`
-        .login-container { display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .login-card { background: var(--card-bg); padding: 2.5rem; border-radius: 1rem; border: 1px solid var(--card-border); width: 100%; max-width: 400px; backdrop-filter: blur(10px); }
-        .login-form { display: flex; flex-direction: column; gap: 1.5rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-        input { padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--card-border); background: rgba(0,0,0,0.2); color: white; outline: none; }
-        .login-btn { margin-top: 1rem; width: 100%; }
-        .error-msg { color: #ef4444; font-size: 0.875rem; text-align: center; }
-      `}</style>
     </div>
   );
 }
