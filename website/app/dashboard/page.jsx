@@ -84,23 +84,23 @@ export default function Dashboard() {
             <div className="bg-black/40 border border-white/10 rounded-3xl p-8 font-mono text-sm relative overflow-hidden group">
                <div className="space-y-4 relative z-10">
                   <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
-                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Cluster Host</span>
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">HOSTNAME</span>
                     <span className="text-emerald-500">{process.env.NEXT_PUBLIC_DB_EXTERNAL_HOST || 'cluster-01.cvmc.data'}</span>
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
-                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">System Port</span>
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">PORT</span>
                     <span className="text-white">5432</span>
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
-                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Operator Identity</span>
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">USERNAME</span>
                     <span className="text-white font-bold">{db_user}</span>
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
-                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Target Database</span>
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">DATABASE</span>
                     <span className="text-white">cvmc_data</span>
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center justify-between py-2">
-                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Access Key</span>
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">PASSWORD</span>
                     <span className="text-gray-400 italic">•••••••••••• (Account Password)</span>
                   </div>
                </div>
