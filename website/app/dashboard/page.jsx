@@ -73,43 +73,44 @@ export default function Dashboard() {
 
         {/* PostgreSQL Direct Access (Large) */}
         <div className="md:col-span-12 bento-card h-auto py-12 border-white/20">
-          <div className="flex flex-col md:flex-row gap-12 items-start">
-            <div className="flex-1">
-              <h3 className="text-2xl font-black tracking-tighter mb-4 italic">🔐 DIRECT PROTOCOL ACCESS</h3>
-              <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                Your credentials are synchronized with our core PostgreSQL engine. 
-                Use any DaaS-compatible client (DBeaver, Python/SQLAlchemy) to run queries directly against 
-                the <span className="text-white font-bold">Silver</span> and <span className="text-white font-bold">Gold</span> layers.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {['Port: 5432', 'SSL: Required', 'Query: Read-Only'].map(tag => (
-                  <span key={tag} className="px-3 py-1 bg-white/5 border border-white/5 rounded-lg text-[10px] uppercase tracking-widest text-gray-400 font-bold">{tag}</span>
-                ))}
-              </div>
-            </div>
-
-            <div className="w-full md:w-96 bg-black/40 border border-white/10 rounded-3xl p-8 font-mono text-xs relative overflow-hidden group">
-               <div className="absolute top-0 right-0 p-4 opacity-5 text-4xl font-black uppercase">Postgres</div>
+          <div className="max-w-3xl">
+            <h3 className="text-2xl font-black tracking-tighter mb-4 italic text-white">🔐 DIRECT PROTOCOL ACCESS</h3>
+            <p className="text-gray-500 text-sm leading-relaxed mb-8">
+              Your credentials are synchronized with our core PostgreSQL engine. 
+              Use any DaaS-compatible client (DBeaver, Python/SQLAlchemy) to run queries directly against 
+              the <span className="text-white font-bold">Silver</span> and <span className="text-white font-bold">Gold</span> layers.
+            </p>
+            
+            <div className="bg-black/40 border border-white/10 rounded-3xl p-8 font-mono text-sm relative overflow-hidden group">
+               <div className="absolute top-0 right-0 p-6 opacity-5 text-5xl font-black uppercase pointer-events-none">Postgres</div>
                <div className="space-y-4 relative z-10">
-                  <div className="pb-4 border-b border-white/5">
-                    <span className="text-gray-600 block mb-1 font-sans font-bold uppercase tracking-tighter">Cluster Endpoint</span>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Cluster Host</span>
                     <span className="text-emerald-500">{process.env.NEXT_PUBLIC_DB_EXTERNAL_HOST || 'cluster-01.cvmc.data'}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <span className="text-gray-600 block mb-1 font-sans font-bold uppercase tracking-tighter">Identity</span>
-                      <span className="text-white">{db_user}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-600 block mb-1 font-sans font-bold uppercase tracking-tighter">Database</span>
-                      <span className="text-white">cvmc_data</span>
-                    </div>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">System Port</span>
+                    <span className="text-white">5432</span>
                   </div>
-                  <div className="pt-4 mt-4 border-t border-white/5">
-                    <span className="text-gray-600 block mb-1 font-sans font-bold uppercase tracking-tighter">Access Key</span>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Operator Identity</span>
+                    <span className="text-white font-bold">{db_user}</span>
+                  </div>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Target Database</span>
+                    <span className="text-white">cvmc_data</span>
+                  </div>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">Access Key</span>
                     <span className="text-gray-400 italic">•••••••••••• (Account Password)</span>
                   </div>
                </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-8">
+              {['SSL: Required', 'Query: Read-Only', 'Role: Grant Select'].map(tag => (
+                <span key={tag} className="px-3 py-1 bg-white/5 border border-white/5 rounded-lg text-[10px] uppercase tracking-widest text-gray-400 font-bold">{tag}</span>
+              ))}
             </div>
           </div>
         </div>
