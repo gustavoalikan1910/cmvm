@@ -22,12 +22,16 @@ export default function Home() {
             Production Ready: Data Pipeline v2.4
           </div>
           
-          <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent flex flex-col md:flex-row items-center justify-center gap-4">
-            <svg viewBox="0 0 100 100" className="w-16 h-16 md:w-32 md:h-32 fill-white opacity-80" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 90c-22.1 0-40-17.9-40-40s17.9-40 40-40 40 17.9 40 40-17.9 40-40 40z"/>
-              <path d="M45.5 25.5v15.9h-5.7v-15.9h-8.5v28.4c0 4.7 3.8 8.5 8.5 8.5h5.7c4.7 0 8.5-3.8 8.5-8.5v-28.4h-8.5zm17.1 0v42.6h8.5v-15.9h5.7c4.7 0 8.5-3.8 8.5-8.5v-9.7c0-4.7-3.8-8.5-8.5-8.5h-14.2zm8.5 8.5h5.7v11.4h-5.7v-11.4z"/>
+          <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent flex flex-col md:flex-row items-center justify-center gap-6">
+            <svg viewBox="0 0 100 100" className="w-20 h-20 md:w-32 md:h-32 fill-white opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" xmlns="http://www.w3.org/2000/svg">
+              {/* C Clássico */}
+              <path d="M42 30c-8 0-14 6-14 14v12c0 8 6 14 14 14h6v-8h-6c-3 0-6-3-6-6v-12c0-3 3-6 6-6h6v-8h-6z"/>
+              {/* P Clássico acoplado */}
+              <path d="M52 30v40h8V54h6c8 0 14-6 14-14s-6-14-14-14H52zm8 8h6c3 0 6 3 6 6s-3 6-6 6h-6V38z"/>
+              {/* Círculo de borda minimalista */}
+              <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="opacity-20" />
             </svg>
-            <span>COMO VAI O MEU<br className="hidden md:block" /> CORINTHIANS?</span>
+            <span className="leading-none">COMO VAI O MEU<br className="hidden md:block" /> CORINTHIANS?</span>
           </h1>
           
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
