@@ -21,3 +21,11 @@ body {
 .glass-pill {
   @apply px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-xs font-medium text-gray-400;
 }
+
+/* Logo Header Fixo - Garantido com !important */
+header.logo-fixed {
+  position: fixed !important;
+  top: 1rem !important;
+  left: 1.5rem !important;
+  z-index: 9999 !important;
+}

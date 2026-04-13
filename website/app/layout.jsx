@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR" className="dark">
-      <body className={`${inter.className} bg-[#050505] text-white selection:bg-white selection:text-black min-h-screen relative overflow-x-hidden`}>
+      <body className={`${inter.className} bg-[#050505] text-white selection:bg-white selection:text-black min-h-screen relative`}>
         {/* Background Global Decor */}
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-zinc-800/20 blur-[120px] rounded-full" />
@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
         </div>
 
         {/* Conteúdo da Página */}
-        <div className="relative z-10">
+        <div className="relative z-10 overflow-x-hidden">
           {children}
         </div>
       </body>
