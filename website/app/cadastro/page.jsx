@@ -34,13 +34,13 @@ export default function Cadastro() {
         
         <div className="text-center mb-10">
           <a href="/" className="inline-block px-3 py-1 rounded-full border border-white/5 bg-white/5 text-[10px] uppercase tracking-widest text-gray-500 hover:text-white transition-colors mb-6">
-            ← Back to Terminal
+            ← Voltar ao Início
           </a>
           <h2 className="text-3xl font-black tracking-tighter bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
-            PROVISION ACCOUNT
+            CRIAR CONTA
           </h2>
           <p className="text-gray-500 mt-2 text-xs uppercase tracking-widest">
-            Enter the data infrastructure
+            Acessar a infraestrutura de dados
           </p>
         </div>
 
@@ -58,7 +58,7 @@ export default function Cadastro() {
 
         <form onSubmit={submit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500 ml-1">Operator Alias</label>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500 ml-1">Usuário</label>
             <input 
               type="text" 
               value={username} 
@@ -70,25 +70,25 @@ export default function Cadastro() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500 ml-1">Secure Email</label>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500 ml-1">Email</label>
             <input 
               type="email" 
               value={email} 
               onChange={e => setEmail(e.target.value)} 
               required 
               className="w-full px-5 py-4 bg-white/[0.02] border border-white/10 rounded-2xl text-white placeholder-gray-700 focus:outline-none focus:border-white/30 transition-all text-sm"
-              placeholder="operator@cvmc.data"
+              placeholder="operador@cvmc.data"
             />
           </div>
 
           <button type="submit" disabled={loading} className={`w-full py-5 text-[11px] uppercase tracking-[0.2em] font-black rounded-2xl transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.05)] ${loading ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-white text-black hover:bg-gray-200 hover:scale-[1.01] shadow-[0_0_30px_rgba(255,255,255,0.1)]'}`}>
-            {loading ? 'Provisioning...' : 'Initialize Access'}
+            {loading ? 'Criando...' : 'Criar conta'}
           </button>
         </form>
 
         <div className="mt-10 text-center">
           <p className="text-[10px] uppercase tracking-widest text-gray-600">
-            Already verified? <a href="/login" className="text-white font-bold hover:underline decoration-white/30 underline-offset-4">Authenticate System</a>
+            Já possui conta? <a href="/login" className="text-white font-bold hover:underline decoration-white/30 underline-offset-4">Autenticar-se</a>
           </p>
         </div>
       </div>
