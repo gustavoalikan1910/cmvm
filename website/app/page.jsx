@@ -47,17 +47,6 @@ export default async function Home() {
     <main className="min-h-screen relative overflow-hidden bg-[#050505]">
       <ParallaxBackground />
 
-      {/* Logo Header - Fixed */}
-      <header style={{ position: 'fixed' }} className="top-4 left-6 z-[9999]">
-        <a href="/" className="inline-block group">
-          <img
-            src="/assets/kuririn_logo.png"
-            alt="Kuririn Logo"
-            className="h-48 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg mix-blend-screen"
-          />
-        </a>
-      </header>
-
       <FadeInContainer>
         <div className="max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
           
