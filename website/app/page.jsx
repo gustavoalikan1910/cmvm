@@ -5,13 +5,43 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   let isPipelineActive = false;
+  let totalEventos = '0';
+  let uptime = '0%';
+  let latencia = '0ms';
+
   try {
-    const result = await pool.query(
-      "SELECT state FROM dag_run WHERE dag_id = 'cvmc_pipeline__brasileirao-serie-a__2026' ORDER BY execution_date DESC LIMIT 1"
-    );
-    if (result.rows.length > 0 && result.rows[0].state === 'success') {
+    const start = performance.now();
+
+    const [pipelineResult, eventosResult, uptimeResult] = await Promise.all([
+      pool.query("SELECT state FROM dag_run WHERE dag_id = 'cvmc_pipeline__brasileirao-serie-a__2026' ORDER BY execution_date DESC LIMIT 1"),
+      pool.query("SELECT COALESCE(SUM(n_live_tup), 0) AS total_eventos FROM pg_stat_user_tables WHERE schemaname = 'gold'"),
+      pool.query("SELECT ROUND(COUNT(CASE WHEN state = 'success' THEN 1 END) * 100.0 / NULLIF(COUNT(*), 0), 1) AS uptime FROM dag_run WHERE dag_id = 'cvmc_pipeline__brasileirao-serie-a__2026'")
+    ]);
+
+    const end = performance.now();
+
+    if (pipelineResult.rows.length > 0 && pipelineResult.rows[0].state === 'success') {
       isPipelineActive = true;
     }
+
+    if (eventosResult.rows.length > 0) {
+      const eventos = parseInt(eventosResult.rows[0].total_eventos, 10);
+      if (eventos > 1000000) {
+        totalEventos = (eventos / 1000000).toFixed(1) + 'M';
+      } else if (eventos > 1000) {
+        totalEventos = (eventos / 1000).toFixed(1) + 'K';
+      } else {
+        totalEventos = eventos.toString();
+      }
+    }
+
+    if (uptimeResult.rows.length > 0 && uptimeResult.rows[0].uptime !== null) {
+      uptime = uptimeResult.rows[0].uptime + '%';
+    } else {
+      uptime = '100%';
+    }
+
+    latencia = '< ' + Math.ceil(end - start) + 'ms';
   } catch (error) {
     console.error('Failed to fetch pipeline status:', error);
   }
@@ -121,15 +151,15 @@ export default async function Home() {
           <div className="md:col-span-8 bento-card bg-gradient-to-br from-white/[0.05] to-transparent">
              <div className="grid grid-cols-3 gap-8 h-full items-center text-center">
                 <div>
-                  <div className="text-4xl font-bold mb-1">2.4M</div>
+                  <div className="text-4xl font-bold mb-1">{totalEventos}</div>
                   <div className="text-[10px] uppercase text-gray-500 tracking-tighter">Eventos Processados</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold mb-1">99.8%</div>
+                  <div className="text-4xl font-bold mb-1">{uptime}</div>
                   <div className="text-[10px] uppercase text-gray-500 tracking-tighter">Uptime Pipelines</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold mb-1">&lt; 2s</div>
+                  <div className="text-4xl font-bold mb-1">{latencia}</div>
                   <div className="text-[10px] uppercase text-gray-500 tracking-tighter">Latência Queries</div>
                 </div>
              </div>
