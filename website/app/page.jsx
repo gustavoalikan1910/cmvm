@@ -44,7 +44,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-[#050505]">
+    <main className="min-h-screen relative bg-[#050505]">
       <ParallaxBackground />
 
       <FadeInContainer>
