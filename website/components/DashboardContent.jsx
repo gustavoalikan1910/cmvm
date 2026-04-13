@@ -50,7 +50,7 @@ export default function DashboardContent({ db_user, matchesCount, teamsCount }) 
             {/* KPI 1 */}
             <FadeInItem className="md:col-span-4">
               <TiltCard className="bento-card min-h-[180px] flex flex-col justify-between group overflow-hidden">
-                <BorderBeam />
+                
                 <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold relative z-10">QTD TOTAL DE PARTIDAS</div>
                 <div className="text-6xl font-black text-white relative z-10 tabular-nums">
                   <AnimatedNumber value={matchesCount} />
@@ -69,7 +69,7 @@ export default function DashboardContent({ db_user, matchesCount, teamsCount }) 
             {/* KPI 2 */}
             <FadeInItem className="md:col-span-4">
               <TiltCard className="bento-card min-h-[180px] flex flex-col justify-between group overflow-hidden">
-                <BorderBeam />
+                
                 <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold relative z-10">QTD TOTAL DE EQUIPES</div>
                 <div className="text-6xl font-black text-white relative z-10 tabular-nums">
                   <AnimatedNumber value={teamsCount} />
@@ -81,7 +81,7 @@ export default function DashboardContent({ db_user, matchesCount, teamsCount }) 
             {/* KPI 3 (Status) */}
             <FadeInItem className="md:col-span-4">
               <TiltCard className="bento-card min-h-[180px] flex flex-col justify-between bg-white/[0.01] border-white/20 overflow-hidden">
-                <BorderBeam />
+                
                 <div className="text-[10px] uppercase tracking-widest text-zinc-400 font-bold relative z-10">DaaS Status</div>
                 <div className="text-3xl font-black text-white flex items-center gap-3 relative z-10">
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.8)]"></span>
@@ -103,7 +103,7 @@ export default function DashboardContent({ db_user, matchesCount, teamsCount }) 
             {/* PostgreSQL Direct Access (Large) */}
             <FadeInItem className="md:col-span-12">
               <div className="bento-card h-auto py-12 border-white/10 bg-gradient-to-br from-white/[0.02] to-transparent relative overflow-hidden">
-                <BorderBeam />
+                
                 <div className="max-w-3xl relative z-10">
                   <h3 className="text-2xl font-black tracking-tighter mb-4 italic text-white flex items-center gap-3 uppercase">
                     <span className="p-2 bg-white/5 rounded-lg border border-white/10">🔐</span>
