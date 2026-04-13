@@ -53,7 +53,7 @@ export default async function Home() {
           <img
             src="/assets/kuririn_logo.png"
             alt="Kuririn Logo"
-            className="h-20 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg bg-transparent"
+            className="h-24 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg mix-blend-screen"
           />
         </a>
       </header>
