@@ -82,7 +82,7 @@ export default async function Home() {
             <a href="/login" className="px-8 py-4 bg-white text-black font-bold rounded-2xl hover:scale-105 transition-transform">
               Acessar banco de dados
             </a>
-            <a href="#architecture" className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/10 transition-colors">
+            <a href="/arquitetura" className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/10 transition-colors">
               Explorar Arquitetura
             </a>
           </div>
