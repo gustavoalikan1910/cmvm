@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR" className="dark">
-      <body className={`${inter.className} bg-[#050505] text-white selection:bg-white selection:text-black min-h-screen relative overflow-x-hidden`}>
+      <body className={`${inter.className} bg-[#050505] text-white selection:bg-white selection:text-black min-h-screen relative`}>
         {/* Background Global Decor */}
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-zinc-800/20 blur-[120px] rounded-full" />
@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
         </div>
 
         {/* Logo Header - Fixed Global */}
-        <header id="logo-header" style={{ position: 'fixed', top: '1rem', left: '1.5rem', zIndex: 9999 }} className="logo-fixed">
+        <header className="logo-fixed">
           <a href="/" className="inline-block group">
             <img
               src="/assets/kuririn_logo.png"
@@ -31,30 +31,9 @@ export default function RootLayout({ children }) {
         </header>
 
         {/* Conteúdo da Página */}
-        <div className="relative z-10">
+        <div className="relative z-10 overflow-x-hidden">
           {children}
         </div>
-
-        {/* Script para garantir position fixed do header */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              var header = document.getElementById('logo-header');
-              if (header) {
-                header.style.position = 'fixed';
-                header.style.top = '1rem';
-                header.style.left = '1.5rem';
-                header.style.zIndex = '9999';
-              }
-              window.addEventListener('scroll', function() {
-                if (header) {
-                  header.style.top = '1rem';
-                  header.style.left = '1.5rem';
-                }
-              }, { passive: true });
-            })();
-          `
-        }} />
       </body>
     </html>
   )
