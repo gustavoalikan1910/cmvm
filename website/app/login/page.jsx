@@ -35,13 +35,13 @@ export default function Login() {
         
         <div className="text-center mb-10">
           <a href="/" className="inline-block px-3 py-1 rounded-full border border-white/5 bg-white/5 text-[10px] uppercase tracking-widest text-gray-500 hover:text-white transition-colors mb-6">
-            ← Back to Terminal
+            ← Voltar ao Início
           </a>
           <h2 className="text-3xl font-black tracking-tighter bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
-            RESTRICTED ACCESS
+            ACESSO RESTRITO
           </h2>
           <p className="text-gray-500 mt-2 text-xs uppercase tracking-widest">
-            Identity verification required
+            Verificação de identidade
           </p>
         </div>
 
@@ -51,45 +51,44 @@ export default function Login() {
               {error}
             </div>
           )}
-          
+
           <div className="space-y-2">
-            <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500 ml-1">Secure Email</label>
-            <input 
-              type="email" 
-              value={email} 
-              onChange={e => setEmail(e.target.value)} 
-              required 
+            <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500 ml-1">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
               className="w-full px-5 py-4 bg-white/[0.02] border border-white/10 rounded-2xl text-white placeholder-gray-700 focus:outline-none focus:border-white/30 transition-all text-sm"
-              placeholder="operator@cvmc.data"
+              placeholder="operador@cvmc.data"
             />
           </div>
 
           <div className="space-y-2">
             <div className="flex justify-between items-center ml-1">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Access Key</label>
-              <a href="/esqueci-senha" className="text-[10px] uppercase tracking-widest text-gray-600 hover:text-white transition-colors">Recover?</a>
+              <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Senha</label>
+              <a href="/esqueci-senha" className="text-[10px] uppercase tracking-widest text-gray-600 hover:text-white transition-colors">Recuperar?</a>
             </div>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={e => setPassword(e.target.value)} 
-              required 
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
               className="w-full px-5 py-4 bg-white/[0.02] border border-white/10 rounded-2xl text-white placeholder-gray-700 focus:outline-none focus:border-white/30 transition-all text-sm"
               placeholder="••••••••"
             />
           </div>
 
           <button type="submit" className="w-full py-5 bg-white text-black text-[11px] uppercase tracking-[0.2em] font-black rounded-2xl hover:bg-gray-200 transition-all duration-300 hover:scale-[1.01] shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-            Authenticate
+            Autenticar-se
           </button>
         </form>
 
         <div className="mt-10 text-center">
           <p className="text-[10px] uppercase tracking-widest text-gray-600">
-            No credentials? <a href="/cadastro" className="text-white font-bold hover:underline decoration-white/30 underline-offset-4">Provision Account</a>
+            Sem credenciais? <a href="/cadastro" className="text-white font-bold hover:underline decoration-white/30 underline-offset-4">Criar Conta</a>
           </p>
-        </div>
-      </div>
+        </div>      </div>
     </div>
   );
 }
