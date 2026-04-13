@@ -31,13 +31,12 @@ export default function Arquitetura() {
               1
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.04] transition-colors">
-              <h3 className="text-xl font-bold mb-2 text-white">Orquestração & Landing</h3>
+              <h3 className="text-xl font-bold mb-2 text-white">Orquestração</h3>
               <p className="text-gray-400 text-sm mb-4">
-                O Apache Airflow coordena o fluxo, executando as tarefas parametrizadas com Papermill. O dado JSON bruto cai diretamente no Data Lake (MinIO).
+                O Apache Airflow atua como o orquestrador principal de pipelines, coordenando o fluxo de dados e a execução das tarefas parametrizadas com Papermill.
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-[10px] uppercase tracking-widest bg-white/5 border border-white/10 px-2 py-1 rounded">Airflow</span>
-                <span className="text-[10px] uppercase tracking-widest bg-white/5 border border-white/10 px-2 py-1 rounded">MinIO (S3)</span>
               </div>
             </div>
           </div>
