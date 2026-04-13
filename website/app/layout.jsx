@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
         </div>
 
         {/* Logo Header - Fixed Global */}
-        <header style={{ position: 'fixed' }} className="top-4 left-6 z-[9999]">
+        <header style={{ position: 'fixed', top: '1rem', left: '1.5rem', zIndex: 9999 }}>
           <a href="/" className="inline-block group">
             <img
               src="/assets/kuririn_logo.png"
