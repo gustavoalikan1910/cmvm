@@ -50,10 +50,10 @@ export default async function Home() {
       {/* Logo Header */}
       <header className="fixed top-0 left-0 w-full z-50 p-6">
         <a href="/" className="inline-block group">
-          <img 
-            src="/assets/logo.png" 
-            alt="Kuririn Logo" 
-            className="h-12 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" 
+          <img
+            src="/assets/kuririn_logo.png"
+            alt="Kuririn Logo"
+            className="h-12 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg"
           />
         </a>
       </header>
