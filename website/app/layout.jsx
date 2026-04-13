@@ -19,17 +19,6 @@ export default function RootLayout({ children }) {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
-        {/* Logo Header - Fixed Global */}
-        <header className="logo-fixed">
-          <a href="/" className="inline-block group">
-            <img
-              src="/assets/kuririn_logo.png"
-              alt="Kuririn Logo"
-              className="h-48 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg mix-blend-screen"
-            />
-          </a>
-        </header>
-
         {/* Conteúdo da Página */}
         <div className="relative z-10 overflow-x-hidden">
           {children}
