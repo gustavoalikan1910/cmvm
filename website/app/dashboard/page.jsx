@@ -1,8 +1,11 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import pool from '@/lib/db';
 import DashboardContent from '@/components/DashboardContent';
 
-export default function Dashboard() {
+export const dynamic = 'force-dynamic';
+
+export default async function Dashboard() {
   const cookieStore = cookies();
   const session = cookieStore.get('cvmc_session');
 
@@ -24,5 +27,24 @@ export default function Dashboard() {
 
   const db_user = user?.nome?.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() || 'undefined';
 
-  return <DashboardContent db_user={db_user} />;
+  let matchesCount = '0';
+  let teamsCount = '0';
+
+  try {
+    const [matchesRes, teamsRes] = await Promise.all([
+      pool.query('SELECT COUNT(DISTINCT event_id) FROM "gold"."obt_team_match_stats"'),
+      pool.query('SELECT COUNT(DISTINCT team_id) FROM "gold"."obt_team_match_stats"')
+    ]);
+
+    matchesCount = matchesRes.rows[0].count;
+    teamsCount = teamsRes.rows[0].count;
+  } catch (error) {
+    console.error('Failed to fetch dashboard stats:', error);
+  }
+
+  return <DashboardContent 
+    db_user={db_user} 
+    matchesCount={matchesCount} 
+    teamsCount={teamsCount} 
+  />;
 }

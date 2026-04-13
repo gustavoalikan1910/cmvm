@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { AnimatedNumber } from './HomeAnimations';
 
-export default function DashboardContent({ db_user }) {
+export default function DashboardContent({ db_user, matchesCount, teamsCount }) {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -35,14 +35,14 @@ export default function DashboardContent({ db_user }) {
         className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-16"
       >
         <div>
-          <div className="glass-pill mb-4 w-fit px-4 py-1 border-white/10 bg-white/5 text-zinc-400">
-            Active Session: <span className="text-white font-mono">{db_user}</span>
+          <div className="glass-pill mb-4 w-fit px-4 py-1 border-white/10 bg-white/5 text-zinc-400 font-mono text-[10px] uppercase">
+            Sessão Ativa: <span className="text-white font-bold">{db_user}</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter bg-gradient-to-b from-white via-white to-zinc-500 bg-clip-text text-transparent">
-            OPERATOR DASHBOARD
+            PAINEL DO OPERADOR
           </h1>
           <p className="text-zinc-500 mt-2 text-[10px] uppercase tracking-[0.3em] font-bold">
-            Data Access & System Integrity Center
+            Acesso a Dados & Centro de Integridade
           </p>
         </div>
         <motion.a 
@@ -51,7 +51,7 @@ export default function DashboardContent({ db_user }) {
           href="/login" 
           className="px-6 py-3 bg-white/5 border border-white/10 text-white text-[10px] uppercase tracking-widest font-black rounded-2xl transition-colors"
         >
-          Terminate Session
+          Encerrar Sessão
         </motion.a>
       </motion.header>
 
@@ -64,14 +64,14 @@ export default function DashboardContent({ db_user }) {
 
         {/* KPI 1 */}
         <motion.div variants={itemVariants} className="md:col-span-4 bento-card min-h-[180px] flex flex-col justify-between group">
-          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Matches Scanned</div>
+          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">QTD TOTAL DE PARTIDAS</div>
           <div className="text-6xl font-black text-white">
-            <AnimatedNumber value="1425" />
+            <AnimatedNumber value={matchesCount} />
           </div>
           <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
              <motion.div 
                initial={{ width: 0 }}
-               animate={{ width: "70%" }}
+               animate={{ width: "100%" }}
                transition={{ duration: 1.5, delay: 0.5 }}
                className="h-full bg-white/40 shadow-[0_0_15px_rgba(255,255,255,0.3)]"
              />
@@ -80,11 +80,11 @@ export default function DashboardContent({ db_user }) {
 
         {/* KPI 2 */}
         <motion.div variants={itemVariants} className="md:col-span-4 bento-card min-h-[180px] flex flex-col justify-between group">
-          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Active Teams</div>
+          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">QTD TOTAL DE EQUIPES</div>
           <div className="text-6xl font-black text-white">
-            <AnimatedNumber value="86" />
+            <AnimatedNumber value={teamsCount} />
           </div>
-          <div className="text-[10px] text-zinc-600 uppercase tracking-tighter">Cross-referenced across 4 leagues</div>
+          <div className="text-[10px] text-zinc-600 uppercase tracking-tighter">Cruzamento de dados entre ligas</div>
         </motion.div>
 
         {/* KPI 3 (Status) */}
@@ -92,7 +92,7 @@ export default function DashboardContent({ db_user }) {
           <div className="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">DaaS Status</div>
           <div className="text-3xl font-black text-white flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.8)]"></span>
-            OPERATIONAL
+            OPERACIONAL
           </div>
           <div className="flex gap-1.5">
              {[...Array(6)].map((_, i) => (
@@ -109,14 +109,14 @@ export default function DashboardContent({ db_user }) {
         {/* PostgreSQL Direct Access (Large) */}
         <motion.div variants={itemVariants} className="md:col-span-12 bento-card h-auto py-12 border-white/10 bg-gradient-to-br from-white/[0.02] to-transparent">
           <div className="max-w-3xl">
-            <h3 className="text-2xl font-black tracking-tighter mb-4 italic text-white flex items-center gap-3">
+            <h3 className="text-2xl font-black tracking-tighter mb-4 italic text-white flex items-center gap-3 uppercase">
               <span className="p-2 bg-white/5 rounded-lg border border-white/10">🔐</span>
-              DIRECT PROTOCOL ACCESS
+              Credenciais de Acesso ao Postgres
             </h3>
             <p className="text-zinc-500 text-sm leading-relaxed mb-10">
-              Your credentials are synchronized with our core PostgreSQL engine. 
-              Use any DaaS-compatible client to run queries directly against 
-              the <span className="text-white font-bold underline decoration-white/20">Silver</span> and <span className="text-white font-bold underline decoration-white/20">Gold</span> layers.
+              Suas credenciais estão sincronizadas com nosso motor principal PostgreSQL. 
+              Utilize qualquer cliente compatível com DaaS para executar consultas diretamente contra 
+              as camadas <span className="text-white font-bold underline decoration-white/20">Silver</span> e <span className="text-white font-bold underline decoration-white/20">Gold</span>.
             </p>
             
             <div className="bg-black/60 border border-white/10 rounded-3xl p-8 font-mono text-sm relative overflow-hidden group hover:border-white/30 transition-all duration-700">
@@ -126,7 +126,7 @@ export default function DashboardContent({ db_user }) {
                     { label: 'PORT', value: '5432', color: 'text-zinc-400' },
                     { label: 'USERNAME', value: db_user, color: 'text-white font-bold' },
                     { label: 'DATABASE', value: 'cvmc_data', color: 'text-zinc-400' },
-                    { label: 'PASSWORD', value: '•••••••••••• (Account Password)', color: 'text-zinc-600 italic' }
+                    { label: 'PASSWORD', value: '•••••••••••• (Senha da Conta)', color: 'text-zinc-600 italic' }
                   ].map((item, i) => (
                     <div key={i} className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5 last:border-0">
                       <span className="text-zinc-600 font-sans font-bold uppercase tracking-[0.2em] text-[9px]">{item.label}</span>
@@ -134,12 +134,11 @@ export default function DashboardContent({ db_user }) {
                     </div>
                   ))}
                </div>
-               {/* Scanline effect sutil */}
                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent h-20 w-full animate-scanline pointer-events-none" />
             </div>
 
             <div className="flex flex-wrap gap-3 mt-10">
-              {['SSL: Required', 'Query: Read-Only', 'Role: Grant Select'].map(tag => (
+              {['SSL: Obrigatório', 'Consultas: Somente Leitura', 'Papel: Grant Select'].map(tag => (
                 <span key={tag} className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[9px] uppercase tracking-widest text-zinc-500 font-bold hover:text-white hover:border-white/30 transition-all">{tag}</span>
               ))}
             </div>
@@ -150,7 +149,7 @@ export default function DashboardContent({ db_user }) {
 
       <footer className="mt-20 pt-10 border-t border-white/5 text-center">
          <p className="text-[9px] uppercase tracking-[0.4em] text-zinc-700 font-black">
-           CVMC DATA INTERFACE v2.4.0-STABLE // ENCRYPTED SESSION // NO GREEN PROTOCOL
+           CVMC DATA INTERFACE v2.4.0-STABLE // SESSÃO CRIPTOGRAFADA // PROTOCOLO NO GREEN
          </p>
       </footer>
 
