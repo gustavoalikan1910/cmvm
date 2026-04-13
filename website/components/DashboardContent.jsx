@@ -122,7 +122,7 @@ export default function DashboardContent({ db_user }) {
             <div className="bg-black/60 border border-white/10 rounded-3xl p-8 font-mono text-sm relative overflow-hidden group hover:border-white/30 transition-all duration-700">
                <div className="space-y-5 relative z-10">
                   {[
-                    { label: 'HOSTNAME', value: 'cluster-01.cvmc.data', color: 'text-white' },
+                    { label: 'HOSTNAME', value: process.env.NEXT_PUBLIC_DB_EXTERNAL_HOST || 'cluster-01.cvmc.data', color: 'text-white' },
                     { label: 'PORT', value: '5432', color: 'text-zinc-400' },
                     { label: 'USERNAME', value: db_user, color: 'text-white font-bold' },
                     { label: 'DATABASE', value: 'cvmc_data', color: 'text-zinc-400' },
