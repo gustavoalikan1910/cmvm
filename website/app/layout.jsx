@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
         </div>
 
         {/* Logo Header - Fixed Global */}
-        <header className="logo-fixed">
+        <header id="logo-header" style={{ position: 'fixed', top: '1rem', left: '1.5rem', zIndex: 9999 }} className="logo-fixed">
           <a href="/" className="inline-block group">
             <img
               src="/assets/kuririn_logo.png"
@@ -34,6 +34,27 @@ export default function RootLayout({ children }) {
         <div className="relative z-10">
           {children}
         </div>
+
+        {/* Script para garantir position fixed do header */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              var header = document.getElementById('logo-header');
+              if (header) {
+                header.style.position = 'fixed';
+                header.style.top = '1rem';
+                header.style.left = '1.5rem';
+                header.style.zIndex = '9999';
+              }
+              window.addEventListener('scroll', function() {
+                if (header) {
+                  header.style.top = '1rem';
+                  header.style.left = '1.5rem';
+                }
+              }, { passive: true });
+            })();
+          `
+        }} />
       </body>
     </html>
   )
