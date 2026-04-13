@@ -58,7 +58,7 @@ export default async function Home() {
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
         
         {/* Hero Section */}
-        <div className="text-center mb-24">
+        <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 glass-pill mb-8">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -88,13 +88,29 @@ export default async function Home() {
           </div>
         </div>
 
+        {/* Stats Header */}
+        <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto items-center text-center mb-24 pb-12 border-b border-white/5">
+           <div>
+             <div className="text-4xl md:text-5xl font-bold mb-2">{totalEventos}</div>
+             <div className="text-xs uppercase text-gray-500 tracking-tighter">Eventos Processados</div>
+           </div>
+           <div>
+             <div className="text-4xl md:text-5xl font-bold mb-2">{uptime}</div>
+             <div className="text-xs uppercase text-gray-500 tracking-tighter">Uptime Pipelines</div>
+           </div>
+           <div>
+             <div className="text-4xl md:text-5xl font-bold mb-2">{latencia}</div>
+             <div className="text-xs uppercase text-gray-500 tracking-tighter">Latência Queries</div>
+           </div>
+        </div>
+
         {/* Bento Grid Architecture */}
         <section id="architecture" className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[240px]">
           
           {/* Card 1: Ingestion (Large) */}
           <div className="md:col-span-8 bento-card group">
             <div className="flex justify-between items-start mb-4">
-              <h3 className="text-2xl font-bold">01. Ingestão Distribuída</h3>
+              <h3 className="text-2xl font-bold">Ingestão Distribuída</h3>
               <div className={`text-xs font-mono px-2 py-1 rounded ${isPipelineActive ? 'text-emerald-400 bg-emerald-400/10' : 'text-red-400 bg-red-400/10'}`}>
                 {isPipelineActive ? 'Active' : 'Inactive'}
               </div>
@@ -123,18 +139,18 @@ export default async function Home() {
 
           {/* Card 2: Silver Layer (Small) */}
           <div className="md:col-span-4 bento-card border-emerald-500/20">
-            <h3 className="text-xl font-bold mb-2">02. Silver Layer</h3>
+            <h3 className="text-xl font-bold mb-2">Silver Layer</h3>
             <p className="text-sm text-gray-500">
               Tratamento de schema, deduplicação e normalização SQL pura. 
               Garantia de integridade para análise.
             </p>
           </div>
 
-          {/* Card 3: Database Tech (Medium) */}
-          <div className="md:col-span-4 bento-card">
-            <div className="flex flex-col h-full justify-between">
+          {/* Card 3: Database Tech (Wide) */}
+          <div className="md:col-span-12 bento-card">
+            <div className="flex flex-col md:flex-row h-full justify-between items-start md:items-center">
               <div>
-                <h3 className="text-xl font-bold mb-2">03. Gold Analytics</h3>
+                <h3 className="text-xl font-bold mb-2">Gold Analytics</h3>
                 <p className="text-sm text-gray-500 italic mb-4">PostgreSQL (Camada Gold)</p>
                 <ul className="text-xs text-gray-400 space-y-1 font-mono">
                   <li>• obt_team_season_stats</li>
@@ -143,26 +159,8 @@ export default async function Home() {
                   <li>• obt_player_match_stats</li>
                 </ul>
               </div>
-              <div className="text-6xl font-black text-white/5 select-none self-end mt-4">SQL</div>
+              <div className="text-6xl font-black text-white/5 select-none self-end md:self-auto mt-4 md:mt-0">SQL</div>
             </div>
-          </div>
-
-          {/* Card 4: Stats (Large) */}
-          <div className="md:col-span-8 bento-card bg-gradient-to-br from-white/[0.05] to-transparent">
-             <div className="grid grid-cols-3 gap-8 h-full items-center text-center">
-                <div>
-                  <div className="text-4xl font-bold mb-1">{totalEventos}</div>
-                  <div className="text-[10px] uppercase text-gray-500 tracking-tighter">Eventos Processados</div>
-                </div>
-                <div>
-                  <div className="text-4xl font-bold mb-1">{uptime}</div>
-                  <div className="text-[10px] uppercase text-gray-500 tracking-tighter">Uptime Pipelines</div>
-                </div>
-                <div>
-                  <div className="text-4xl font-bold mb-1">{latencia}</div>
-                  <div className="text-[10px] uppercase text-gray-500 tracking-tighter">Latência Queries</div>
-                </div>
-             </div>
           </div>
 
         </section>

@@ -27,7 +27,7 @@ export default function Arquitetura() {
           
           {/* Step 1 */}
           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-emerald-500 shadow-[0_0_20px_rgba(52,211,153,0.4)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.2)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
               1
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.04] transition-colors">
@@ -44,7 +44,7 @@ export default function Arquitetura() {
 
           {/* Step 2 */}
           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-emerald-500 shadow-[0_0_20px_rgba(52,211,153,0.4)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.2)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
               2
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.04] transition-colors">
@@ -61,8 +61,25 @@ export default function Arquitetura() {
 
           {/* Step 3 */}
           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-emerald-500 shadow-[0_0_20px_rgba(52,211,153,0.4)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.2)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
               3
+            </div>
+            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.04] transition-colors">
+              <h3 className="text-xl font-bold mb-2 text-white">Raw (Data Lake)</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                Dados brutos (JSON) são convertidos para o formato Delta Lake na camada Raw com schema evolution (Autoloader), preservando o histórico integral.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <span className="text-[10px] uppercase tracking-widest bg-white/5 border border-white/10 px-2 py-1 rounded">Spark</span>
+                <span className="text-[10px] uppercase tracking-widest bg-white/5 border border-white/10 px-2 py-1 rounded">Delta Lake</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 4 */}
+          <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.2)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+              4
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.04] transition-colors">
               <h3 className="text-xl font-bold mb-2 text-white">Silver (Cleansing)</h3>
@@ -76,10 +93,10 @@ export default function Arquitetura() {
             </div>
           </div>
 
-          {/* Step 4 */}
+          {/* Step 5 */}
           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-emerald-500 shadow-[0_0_20px_rgba(52,211,153,0.4)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-              4
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.2)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+              5
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.04] transition-colors">
               <h3 className="text-xl font-bold mb-2 text-white">Gold (Analytics)</h3>
@@ -93,10 +110,10 @@ export default function Arquitetura() {
             </div>
           </div>
 
-          {/* Step 5 */}
+          {/* Step 6 */}
           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-emerald-500 shadow-[0_0_20px_rgba(52,211,153,0.4)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-              5
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#050505] bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.2)] text-black font-bold z-10 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+              6
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.04] transition-colors">
               <h3 className="text-xl font-bold mb-2 text-white">Acesso & Visualização</h3>
