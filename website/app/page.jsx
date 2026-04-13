@@ -47,6 +47,17 @@ export default async function Home() {
     <main className="min-h-screen relative overflow-hidden bg-[#050505]">
       <ParallaxBackground />
 
+      {/* Logo Header */}
+      <header className="fixed top-0 left-0 w-full z-50 p-6">
+        <a href="/" className="inline-block group">
+          <img 
+            src="/assets/logo.png" 
+            alt="Kuririn Logo" 
+            className="h-12 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" 
+          />
+        </a>
+      </header>
+
       <FadeInContainer>
         <div className="max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
           
