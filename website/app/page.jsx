@@ -143,6 +143,7 @@ export default async function Home() {
 
         </div>
       </FadeInContainer>
-    </main>
+      </main>
+    </>
   );
 }
