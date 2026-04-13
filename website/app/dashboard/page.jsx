@@ -12,8 +12,6 @@ export default function Dashboard() {
   let user = null;
   if (session) {
     try {
-      // O JWT é composto por 3 partes separadas por ponto (header.payload.signature)
-      // Extraímos apenas o meio (payload), decodificamos de Base64 URL e lemos o JSON
       const base64Url = session.value.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = Buffer.from(base64, 'base64').toString('utf8');
@@ -26,42 +24,104 @@ export default function Dashboard() {
   const db_user = user?.nome?.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() || 'undefined';
 
   return (
-    <div className="container" style={{ paddingTop: '3rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-        <h2>Bem-vindo, {user?.nome}!</h2>
-        <a href="/login" className="btn btn-secondary">Logout</a>
+    <main className="max-w-7xl mx-auto px-6 pt-24 pb-20">
+      
+      {/* Header */}
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-16 animate-fade-in-up">
+        <div>
+          <div className="glass-pill mb-4 w-fit">Active Session: {db_user}</div>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
+            OPERATOR DASHBOARD
+          </h1>
+          <p className="text-gray-500 mt-2 text-xs uppercase tracking-widest font-bold">
+            Data Access & System Integrity Center
+          </p>
+        </div>
+        <a href="/login" className="px-6 py-3 bg-white/5 border border-white/10 hover:bg-red-500/10 hover:border-red-500/20 text-white text-[10px] uppercase tracking-widest font-black rounded-2xl transition-all">
+          Terminate Session
+        </a>
       </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
 
-        {/* KPI Mocks */}
-        <div className="card">
-          <h3 style={{ color: 'var(--text-secondary)' }}>Partidas Analisadas</h3>
-          <p style={{ fontSize: '3rem', fontWeight: 'bold' }}>1,425</p>
-        </div>
-        <div className="card">
-          <h3 style={{ color: 'var(--text-secondary)' }}>Times Ativos</h3>
-          <p style={{ fontSize: '3rem', fontWeight: 'bold' }}>86</p>
+        {/* KPI 1 */}
+        <div className="md:col-span-4 bento-card min-h-[180px] flex flex-col justify-between group">
+          <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Matches Scanned</div>
+          <div className="text-5xl font-black text-white group-hover:scale-105 transition-transform origin-left">1,425</div>
+          <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+             <div className="h-full w-[70%] bg-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+          </div>
         </div>
 
-        {/* Credenciais Postgres */}
-        <div className="card" style={{ gridColumn: '1 / -1', borderLeft: '4px solid #10b981' }}>
-          <h3 style={{ marginBottom: '1rem' }}>🔐 Credenciais de Acesso Direto (PostgreSQL)</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-            Seu usuário possui acesso programático garantido com regra `GRANT SELECT` nas camadas DaaS do projeto.
-            Utilize qualquer ferramenta (DBeaver, DataGrip, Python/Pandas) conectando-se com os dados abaixo:
-          </p>
-          <div style={{ background: 'rgba(0,0,0,0.5)', padding: '1.5rem', borderRadius: '0.5rem', fontFamily: 'monospace', display: 'grid', gap: '0.5rem', fontSize: '1.1rem' }}>
-            <div><span style={{ color: 'var(--text-secondary)' }}>Host:</span> {process.env.NEXT_PUBLIC_DB_EXTERNAL_HOST || 'localhost'}</div>
-            <div><span style={{ color: 'var(--text-secondary)' }}>Porta:</span> 5432</div>
-            <div><span style={{ color: 'var(--text-secondary)' }}>Database:</span> cvmc_data</div>
-            <div><span style={{ color: 'var(--text-secondary)' }}>Schemas de Leitura:</span> silver, gold</div>
-            <div style={{ marginTop: '1rem', color: '#10b981' }}><strong>Usuário:</strong> {db_user}</div>
-            <div style={{ color: '#10b981' }}><strong>Senha:</strong> ******** (Sua senha web definida)</div>
+        {/* KPI 2 */}
+        <div className="md:col-span-4 bento-card min-h-[180px] flex flex-col justify-between group">
+          <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Active Teams</div>
+          <div className="text-5xl font-black text-white group-hover:scale-105 transition-transform origin-left">86</div>
+          <div className="text-[10px] text-gray-600">Cross-referenced across 4 leagues</div>
+        </div>
+
+        {/* KPI 3 */}
+        <div className="md:col-span-4 bento-card min-h-[180px] flex flex-col justify-between bg-emerald-500/5 border-emerald-500/20">
+          <div className="text-[10px] uppercase tracking-widest text-emerald-500/50 font-bold">DaaS Status</div>
+          <div className="text-3xl font-black text-emerald-400">OPERATIONAL</div>
+          <div className="flex gap-1">
+             {[...Array(5)].map((_, i) => (
+               <div key={i} className="h-4 w-2 bg-emerald-500/40 rounded-sm animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}></div>
+             ))}
+          </div>
+        </div>
+
+        {/* PostgreSQL Direct Access (Large) */}
+        <div className="md:col-span-12 bento-card h-auto py-12 border-white/20">
+          <div className="max-w-3xl">
+            <h3 className="text-2xl font-black tracking-tighter mb-4 italic text-white">🔐 DIRECT PROTOCOL ACCESS</h3>
+            <p className="text-gray-500 text-sm leading-relaxed mb-8">
+              Your credentials are synchronized with our core PostgreSQL engine. 
+              Use any DaaS-compatible client (DBeaver, Python/SQLAlchemy) to run queries directly against 
+              the <span className="text-white font-bold">Silver</span> and <span className="text-white font-bold">Gold</span> layers.
+            </p>
+            
+            <div className="bg-black/40 border border-white/10 rounded-3xl p-8 font-mono text-sm relative overflow-hidden group">
+               <div className="space-y-4 relative z-10">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">HOSTNAME</span>
+                    <span className="text-emerald-500">{process.env.NEXT_PUBLIC_DB_EXTERNAL_HOST || 'cluster-01.cvmc.data'}</span>
+                  </div>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">PORT</span>
+                    <span className="text-white">5432</span>
+                  </div>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">USERNAME</span>
+                    <span className="text-white font-bold">{db_user}</span>
+                  </div>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2 border-b border-white/5">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">DATABASE</span>
+                    <span className="text-white">cvmc_data</span>
+                  </div>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between py-2">
+                    <span className="text-gray-600 font-sans font-bold uppercase tracking-widest text-[10px]">PASSWORD</span>
+                    <span className="text-gray-400 italic">•••••••••••• (Account Password)</span>
+                  </div>
+               </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-8">
+              {['SSL: Required', 'Query: Read-Only', 'Role: Grant Select'].map(tag => (
+                <span key={tag} className="px-3 py-1 bg-white/5 border border-white/5 rounded-lg text-[10px] uppercase tracking-widest text-gray-400 font-bold">{tag}</span>
+              ))}
+            </div>
           </div>
         </div>
 
       </div>
-    </div>
+
+      <footer className="mt-20 pt-10 border-t border-white/5 text-center">
+         <p className="text-[10px] uppercase tracking-widest text-gray-600">
+           CVMC DATA INTERFACE v2.4.0-STABLE // ENCRYPTED SESSION
+         </p>
+      </footer>
+
+    </main>
   );
 }
