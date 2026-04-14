@@ -1,2 +1,0 @@
-## Qwen Added Memories
-- Projeto CVMC (Como Vai o Meu Corinthians) - Website Next.js 14 com App Router, Tailwind CSS, Framer Motion, PostgreSQL, autenticação JWT, Google Gemini AI. Deploy via SSH com plink.exe usando chave em C:\Users\GustavoAlikanFeverei\Downloads\private_key_oracle.ppk para ubuntu@163.176.241.242 em ~/CVMC-data. Comando de deploy: git fetch + git reset --hard + docker compose up -d --build website. Branch de trabalho: feature/dashboard-redesign-animations. URL: https://soccerdataplatform.duckdns.org/
