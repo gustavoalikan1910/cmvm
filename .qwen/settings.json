@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "Bash(git branch *)",
+      "Bash(git pull *)",
+      "Bash(git remote *)",
+      "Bash(powershell *)",
+      "Bash(copy *)",
+      "Bash(rmdir *)",
+      "Bash(del *)",
+      "Bash(mkdir *)",
+      "Bash(exist *)",
+      "Bash(echo *)",
+      "Bash(xcopy *)"
+    ]
+  },
+  "$version": 3
+}
