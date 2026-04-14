@@ -12,7 +12,8 @@
       "Bash(mkdir *)",
       "Bash(exist *)",
       "Bash(echo *)",
-      "Bash(xcopy *)"
+      "Bash(xcopy *)",
+      "Bash(git reset *)"
     ]
   },
   "$version": 3
