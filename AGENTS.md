@@ -20,9 +20,9 @@ Medallion Architecture: `Landing (MinIO) → Raw (Delta) → Silver (Delta) → 
 - Work on feature branches, base is always `main`
 
 ## Skills & References
-- Project skills are available in `.qwen/skills/` and `.gemini/skills/`
-- Data architecture: see `references/architecture.md`
-- Web patterns: see `references/web_patterns.md`
+- Project skills are available in `.qwen/skills/`, `.gemini/skills/`, and `.claude/skills/`
+- Data architecture: see `references/architecture.md` in each skill directory
+- All three tools (Qwen, Gemini, Claude) use the same `SKILL.md` format
 
 ## Deployment
 - Server: `ubuntu@163.176.241.242` at `~/CVMC-data`

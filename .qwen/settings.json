@@ -13,7 +13,8 @@
       "Bash(exist *)",
       "Bash(echo *)",
       "Bash(xcopy *)",
-      "Bash(git reset *)"
+      "Bash(git reset *)",
+      "Bash(tsc *)"
     ]
   },
   "$version": 3
