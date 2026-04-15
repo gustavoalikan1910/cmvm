@@ -1,5 +1,15 @@
-﻿# Sincroniza o SKILL.md central para todas as pastas de agents
+﻿# Sincroniza os arquivos de skills da pasta central para todas as pastas de agents.
 # Uso: .\sync-skills.ps1
+#
+# Fonte central: .agents/skills/<skill>/
+# Destinos:      .claude/skills/<skill>/   (Claude Code)
+#                .gemini/skills/<skill>/   (Gemini CLI)
+#                .qwen/skills/<skill>/     (Qwen Code)
+#
+# Arquivos de config por agente (NAO sao sincronizados - editar manualmente):
+#   .claude/CLAUDE.md   - instrucoes do Claude Code
+#   GEMINI.md           - instrucoes do Gemini CLI (raiz do projeto)
+#   AGENTS.md           - instrucoes do Qwen Code  (raiz do projeto)
 
 $SOURCE = ".agents\skills\cvmc-assistant"
 $TARGETS = @(

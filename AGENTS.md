@@ -13,6 +13,9 @@ CVMC (Como Vai o Meu Corinthians) - A full-stack data platform and web portfolio
 ## Data Architecture
 Medallion Architecture: `Landing (MinIO) → Raw (Delta) → Silver (Delta) → Gold (Postgres)`
 
+## Session Start
+At the beginning of every new session, run `powershell -ExecutionPolicy Bypass -File sync-skills.ps1` to sync skills before doing anything else.
+
 ## Development Guidelines
 - Use **raw SQL** for all Postgres queries (portfolio requirement)
 - Follow the data layer architecture strictly

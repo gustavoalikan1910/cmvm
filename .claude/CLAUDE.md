@@ -8,6 +8,9 @@ CVMC (Como Vai o Meu Corinthians) - Full-stack data platform and web portfolio f
 - **Web:** Next.js 14, Tailwind CSS, Framer Motion
 - **AI:** Google Gemini AI
 
+## Session Start
+At the beginning of every new session, run `powershell -ExecutionPolicy Bypass -File sync-skills.ps1` to sync skills before doing anything else.
+
 ## Key Guidelines
 - Use **raw SQL** for Postgres (portfolio requirement)
 - Follow Medallion Architecture: Landing → Raw → Silver → Gold
