@@ -7,7 +7,7 @@ export const metadata = {
   title: 'CVMC | Data Intelligence Platform',
   description: 'Arquitetura de dados de futebol de alto rendimento. De Scrapers a Insights Analíticos.',
   icons: {
-    icon: '/assets/kuririn_logo.png',
+    icon: '/assets/simbolo_CP.png',
   },
 }
 
