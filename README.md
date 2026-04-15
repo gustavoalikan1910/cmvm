@@ -1,6 +1,6 @@
 # CVMC — Como Vai o Meu Corinthians?
 
-Plataforma de engenharia de dados + portfólio web para entrevistas de Data Engineering.
+Plataforma de engenharia de dados + portfólio web de Data Engineering.
 
 **Produção:** https://soccerdataplatform.duckdns.org/
 
