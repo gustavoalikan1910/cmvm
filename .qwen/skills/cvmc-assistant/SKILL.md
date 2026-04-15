@@ -36,3 +36,4 @@ Use esta skill sempre que o usuário precisar de ajuda no diretório `C:\repos\c
 ## Referências Úteis
 - Arquitetura de Dados: [architecture.md](references/architecture.md)
 - Padrões de Código Web: [web_patterns.md](references/web_patterns.md)
+- Servidor e Deploy: [server.md](references/server.md)
