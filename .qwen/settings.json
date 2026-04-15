@@ -14,7 +14,9 @@
       "Bash(echo *)",
       "Bash(xcopy *)",
       "Bash(git reset *)",
-      "Bash(tsc *)"
+      "Bash(tsc *)",
+      "Bash(move *)",
+      "Bash(mklink *)"
     ]
   },
   "$version": 3
