@@ -192,10 +192,52 @@ function TabTimes({ team, comparison, selectedTeam }) {
 
 function TabJogadores({ players }) {
   const [posFilter, setPosFilter] = useState('Todos');
+  const [sortConfig, setSortConfig] = useState({ key: 'appearances', direction: 'desc' });
+
+  const SORT_MAP = {
+    'Jogador': 'player_name',
+    'Jogos': 'appearances',
+    'Gols': 'goals',
+    'Assist': 'assists',
+    'Chutes ✓/✗': 'shots_on_target',
+    'Passes ✓/✗': 'accurate_passes',
+    'Desarmes': 'tackles',
+    'Intercep.': 'interceptions',
+    '🟡/🔴': 'yellow_cards',
+    'Rating': 'rating'
+  };
+
+  const handleSort = (headerName) => {
+    const key = SORT_MAP[headerName];
+    if (sortConfig.key === key) {
+      setSortConfig({ key, direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' });
+    } else {
+      // Default string columns (like player_name) to asc, numbers to desc
+      setSortConfig({ key, direction: key === 'player_name' ? 'asc' : 'desc' });
+    }
+  };
+
+  const sortedPlayers = [...players].sort((a, b) => {
+    const key = sortConfig.key;
+    let valA = a[key];
+    let valB = b[key];
+
+    if (key !== 'player_name') {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else {
+      valA = valA || '';
+      valB = valB || '';
+    }
+
+    if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+    if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
+  });
 
   const filteredPlayers = posFilter === 'Todos'
-    ? players
-    : players.filter(p => p.position === POSITION_MAP[posFilter]);
+    ? sortedPlayers
+    : sortedPlayers.filter(p => p.position === POSITION_MAP[posFilter]);
 
   const totalGoals = players.reduce((s, p) => s + (parseInt(p.goals) || 0), 0);
   const totalAssists = players.reduce((s, p) => s + (parseInt(p.assists) || 0), 0);
@@ -246,8 +288,17 @@ function TabJogadores({ players }) {
             <thead>
               <tr>
                 {['Jogador', 'Jogos', 'Gols', 'Assist', 'Chutes ✓/✗', 'Passes ✓/✗', 'Desarmes', 'Intercep.', '🟡/🔴', 'Rating'].map(h => (
-                  <th key={h} className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-700 text-left px-3 pb-3 border-b border-white/[0.06] first:pl-0">
-                    {h}
+                  <th 
+                    key={h} 
+                    onClick={() => handleSort(h)}
+                    className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-700 text-left px-3 pb-3 border-b border-white/[0.06] first:pl-0 cursor-pointer hover:text-white transition-colors group select-none"
+                  >
+                    <div className="flex items-center gap-1">
+                      {h}
+                      <span className={`text-[10px] ${sortConfig.key === SORT_MAP[h] ? 'text-zinc-400' : 'text-transparent group-hover:text-zinc-600'}`}>
+                        {sortConfig.key === SORT_MAP[h] ? (sortConfig.direction === 'asc' ? '↑' : '↓') : '↕'}
+                      </span>
+                    </div>
                   </th>
                 ))}
               </tr>
