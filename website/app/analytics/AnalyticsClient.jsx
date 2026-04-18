@@ -311,32 +311,62 @@ function TabJogadores({ players }) {
 }
 
 export default function AnalyticsClient({ initialData }) {
-  const { teams, team: initialTeam, comparison: initialComparison, players: initialPlayers } = initialData;
+  const {
+    seasons,
+    selectedSeason: initialSeason,
+    teams: initialTeams,
+    team: initialTeam,
+    comparison: initialComparison,
+    players: initialPlayers,
+  } = initialData;
 
+  const [selectedSeason, setSelectedSeason] = useState(initialSeason);
   const [selectedTeam, setSelectedTeam] = useState(initialTeam?.team_name || 'Corinthians');
   const [activeTab, setActiveTab] = useState('times');
+  const [teams, setTeams] = useState(initialTeams);
   const [teamData, setTeamData] = useState(initialTeam);
   const [comparison, setComparison] = useState(initialComparison);
   const [players, setPlayers] = useState(initialPlayers);
   const [loading, setLoading] = useState(false);
 
-  const handleTeamChange = useCallback(async (teamName) => {
-    setSelectedTeam(teamName);
+  const fetchData = useCallback(async (teamName, season) => {
     setLoading(true);
     try {
+      const qs = `team_name=${encodeURIComponent(teamName)}&season=${encodeURIComponent(season)}`;
       const [statsRes, playersRes] = await Promise.all([
-        fetch(`/api/analytics/team-stats?team_name=${encodeURIComponent(teamName)}`).then(r => r.json()),
-        fetch(`/api/analytics/players?team_name=${encodeURIComponent(teamName)}`).then(r => r.json()),
+        fetch(`/api/analytics/team-stats?${qs}`).then(r => r.json()),
+        fetch(`/api/analytics/players?${qs}`).then(r => r.json()),
       ]);
       setTeamData(statsRes.team);
       setComparison(statsRes.comparison);
       setPlayers(playersRes.players);
     } catch (err) {
-      console.error('Erro ao buscar dados do time:', err);
+      console.error('Erro ao buscar dados:', err);
     } finally {
       setLoading(false);
     }
   }, []);
+
+  const handleTeamChange = useCallback((teamName) => {
+    setSelectedTeam(teamName);
+    fetchData(teamName, selectedSeason);
+  }, [selectedSeason, fetchData]);
+
+  const handleSeasonChange = useCallback(async (season) => {
+    setSelectedSeason(season);
+    setLoading(true);
+    try {
+      const teamsRes = await fetch(`/api/analytics/teams?season=${encodeURIComponent(season)}`).then(r => r.json());
+      const newTeams = teamsRes.teams || [];
+      setTeams(newTeams);
+      const newTeam = newTeams.includes(selectedTeam) ? selectedTeam : (newTeams[0] || 'Corinthians');
+      setSelectedTeam(newTeam);
+      await fetchData(newTeam, season);
+    } catch (err) {
+      console.error('Erro ao trocar temporada:', err);
+      setLoading(false);
+    }
+  }, [selectedTeam, fetchData]);
 
   return (
     <main className="min-h-screen relative bg-[#050505]">
@@ -362,21 +392,42 @@ export default function AnalyticsClient({ initialData }) {
               </p>
             </div>
 
-            {/* Team selector */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600">Time</label>
-              <div className="relative">
-                <select
-                  value={selectedTeam}
-                  onChange={(e) => handleTeamChange(e.target.value)}
-                  disabled={loading}
-                  className="appearance-none bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-2.5 pr-10 text-sm font-bold text-white cursor-pointer focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50 min-w-[200px]"
-                >
-                  {teams.map(t => (
-                    <option key={t} value={t} className="bg-zinc-900">{t}</option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500">▾</div>
+            {/* Selectors */}
+            <div className="flex flex-wrap gap-4 items-end">
+              {/* Season selector */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600">Temporada</label>
+                <div className="relative">
+                  <select
+                    value={selectedSeason || ''}
+                    onChange={(e) => handleSeasonChange(e.target.value)}
+                    disabled={loading}
+                    className="appearance-none bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-2.5 pr-10 text-sm font-bold text-white cursor-pointer focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50 min-w-[130px]"
+                  >
+                    {seasons.map(s => (
+                      <option key={s} value={s} className="bg-zinc-900">{s}</option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500">▾</div>
+                </div>
+              </div>
+
+              {/* Team selector */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600">Time</label>
+                <div className="relative">
+                  <select
+                    value={selectedTeam}
+                    onChange={(e) => handleTeamChange(e.target.value)}
+                    disabled={loading}
+                    className="appearance-none bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-2.5 pr-10 text-sm font-bold text-white cursor-pointer focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50 min-w-[200px]"
+                  >
+                    {teams.map(t => (
+                      <option key={t} value={t} className="bg-zinc-900">{t}</option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500">▾</div>
+                </div>
               </div>
             </div>
           </div>
