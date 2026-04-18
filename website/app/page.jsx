@@ -88,6 +88,9 @@ export default async function Home() {
               <a href="/arquitetura" className="px-10 py-5 bg-zinc-900/50 border border-white/10 text-white font-bold rounded-full hover:bg-zinc-800 transition-all text-lg uppercase tracking-tight backdrop-blur-sm">
                 Explorar Arquitetura
               </a>
+              <a href="/analytics" className="px-10 py-5 bg-zinc-900/50 border border-white/10 text-white font-bold rounded-full hover:bg-zinc-800 transition-all text-lg uppercase tracking-tight backdrop-blur-sm">
+                Analytics
+              </a>
             </FadeInItem>
           </div>
 
