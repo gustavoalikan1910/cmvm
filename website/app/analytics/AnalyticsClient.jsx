@@ -245,7 +245,7 @@ function TabJogadores({ players }) {
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                {['Jogador', 'App', 'Gols', 'Assist', 'Chutes ✓/✗', 'Passes ✓/✗', 'Desarmes', 'Intercep.', '🟡/🔴', 'Rating'].map(h => (
+                {['Jogador', 'Jogos', 'Gols', 'Assist', 'Chutes ✓/✗', 'Passes ✓/✗', 'Desarmes', 'Intercep.', '🟡/🔴', 'Rating'].map(h => (
                   <th key={h} className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-700 text-left px-3 pb-3 border-b border-white/[0.06] first:pl-0">
                     {h}
                   </th>
