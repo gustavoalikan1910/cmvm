@@ -27,7 +27,7 @@ async function fetchInitialData() {
         [latestSeason]
       ),
       client.query(
-        `SELECT team_name, goals_for FROM gold.obt_team_season_stats WHERE season = $1 ORDER BY goals_for DESC`,
+        `SELECT team_name, goals_for, goals_against, possession, xg_for, shots_on_target, tackles_for FROM gold.obt_team_season_stats WHERE season = $1 ORDER BY goals_for DESC`,
         [latestSeason]
       ),
       client.query(
