@@ -134,19 +134,37 @@ function TabTimes({ team, comparison, selectedTeam }) {
     );
   }
 
-  // Radar Chart Data
-  const pPossession = getPercentile(parseFloat(team.possession) || 0, comparison.map(c => parseFloat(c.possession) || 0));
-  const pXg = getPercentile(parseFloat(team.xg_for) || 0, comparison.map(c => parseFloat(c.xg_for) || 0));
-  const pShots = getPercentile(parseInt(team.shots_on_target) || 0, comparison.map(c => parseInt(c.shots_on_target) || 0));
-  const pTackles = getPercentile(parseInt(team.tackles_for) || 0, comparison.map(c => parseInt(c.tackles_for) || 0));
-  const pDefense = getPercentile(parseInt(team.goals_against) || 0, comparison.map(c => parseInt(c.goals_against) || 0), true);
+  // Radar Chart Data (Max Normalization)
+  const maxPossession = Math.max(1, ...comparison.map(c => parseFloat(c.possession) || 0));
+  const maxXg = Math.max(1, ...comparison.map(c => parseFloat(c.xg_for) || 0));
+  const maxShots = Math.max(1, ...comparison.map(c => parseInt(c.shots_on_target) || 0));
+  const maxTackles = Math.max(1, ...comparison.map(c => parseInt(c.tackles_for) || 0));
+  const maxDefense = Math.max(1, ...comparison.map(c => parseInt(c.goals_against) || 0));
+
+  const avgPossession = comparison.reduce((s, c) => s + (parseFloat(c.possession) || 0), 0) / (comparison.length || 1);
+  const avgXg = comparison.reduce((s, c) => s + (parseFloat(c.xg_for) || 0), 0) / (comparison.length || 1);
+  const avgShots = comparison.reduce((s, c) => s + (parseInt(c.shots_on_target) || 0), 0) / (comparison.length || 1);
+  const avgTackles = comparison.reduce((s, c) => s + (parseInt(c.tackles_for) || 0), 0) / (comparison.length || 1);
+  const avgDefense = comparison.reduce((s, c) => s + (parseInt(c.goals_against) || 0), 0) / (comparison.length || 1);
+
+  const tPossession = (parseFloat(team.possession) || 0) / maxPossession * 100;
+  const tXg = (parseFloat(team.xg_for) || 0) / maxXg * 100;
+  const tShots = (parseInt(team.shots_on_target) || 0) / maxShots * 100;
+  const tTackles = (parseInt(team.tackles_for) || 0) / maxTackles * 100;
+  const tDefense = (1 - ((parseInt(team.goals_against) || 0) / maxDefense)) * 100;
+
+  const aPossession = (avgPossession / maxPossession) * 100;
+  const aXg = (avgXg / maxXg) * 100;
+  const aShots = (avgShots / maxShots) * 100;
+  const aTackles = (avgTackles / maxTackles) * 100;
+  const aDefense = (1 - (avgDefense / maxDefense)) * 100;
 
   const radarData = {
     labels: ['Posse de Bola', 'Chances (xG)', 'Chutes a Gol', 'Desarmes', 'Defesa Sólida'],
     datasets: [
       {
         label: team.team_name,
-        data: [pPossession, pXg, pShots, pTackles, pDefense],
+        data: [tPossession, tXg, tShots, tTackles, tDefense],
         backgroundColor: 'rgba(255, 255, 255, 0.15)',
         borderColor: 'rgba(255, 255, 255, 0.8)',
         pointBackgroundColor: '#fff',
@@ -155,7 +173,7 @@ function TabTimes({ team, comparison, selectedTeam }) {
       },
       {
         label: 'Média da Liga',
-        data: [50, 50, 50, 50, 50],
+        data: [aPossession, aXg, aShots, aTackles, aDefense],
         backgroundColor: 'rgba(16, 185, 129, 0.05)',
         borderColor: 'rgba(16, 185, 129, 0.4)',
         pointBackgroundColor: '#10b981',
@@ -248,7 +266,7 @@ function TabTimes({ team, comparison, selectedTeam }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6">
           <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-1">Identidade e Estilo</p>
-          <p className="text-[8px] text-zinc-700 uppercase tracking-widest mb-5">Comparativo com a Média da Liga (Percentis)</p>
+          <p className="text-[8px] text-zinc-700 uppercase tracking-widest mb-5">Métricas normalizadas (Max = 100%)</p>
           <div className="relative h-64 w-full"><Radar data={radarData} options={radarOptions} /></div>
         </div>
         <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6">
