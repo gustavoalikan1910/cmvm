@@ -135,11 +135,11 @@ function TabTimes({ team, comparison, selectedTeam }) {
   }
 
   // Radar Chart Data
-  const pPossession = getPercentile(team.possession, comparison.map(c => parseFloat(c.possession) || 0));
-  const pXg = getPercentile(team.xg_for, comparison.map(c => parseFloat(c.xg_for) || 0));
-  const pShots = getPercentile(team.shots_on_target, comparison.map(c => parseInt(c.shots_on_target) || 0));
-  const pTackles = getPercentile(team.tackles_for, comparison.map(c => parseInt(c.tackles_for) || 0));
-  const pDefense = getPercentile(team.goals_against, comparison.map(c => parseInt(c.goals_against) || 0), true);
+  const pPossession = getPercentile(parseFloat(team.possession) || 0, comparison.map(c => parseFloat(c.possession) || 0));
+  const pXg = getPercentile(parseFloat(team.xg_for) || 0, comparison.map(c => parseFloat(c.xg_for) || 0));
+  const pShots = getPercentile(parseInt(team.shots_on_target) || 0, comparison.map(c => parseInt(c.shots_on_target) || 0));
+  const pTackles = getPercentile(parseInt(team.tackles_for) || 0, comparison.map(c => parseInt(c.tackles_for) || 0));
+  const pDefense = getPercentile(parseInt(team.goals_against) || 0, comparison.map(c => parseInt(c.goals_against) || 0), true);
 
   const radarData = {
     labels: ['Posse de Bola', 'Chances (xG)', 'Chutes a Gol', 'Desarmes', 'Defesa Sólida'],
@@ -403,17 +403,20 @@ function TabJogadores({ players }) {
   const validPlayers = filteredPlayers.length > 0 ? filteredPlayers : players;
   const selectedPlayer = validPlayers.find(p => p.player_name === selectedPlayerName) || validPlayers[0];
 
-  const avgTeamGoals = players.reduce((s, p) => s + (parseInt(p.goals) || 0), 0) / (players.length || 1);
-  const avgTeamAssists = players.reduce((s, p) => s + (parseInt(p.assists) || 0), 0) / (players.length || 1);
-  const avgTeamShots = players.reduce((s, p) => s + (parseInt(p.shots_on_target) || 0), 0) / (players.length || 1);
-  const avgTeamPasses = players.reduce((s, p) => s + (parseInt(p.accurate_passes) || 0), 0) / (players.length || 1);
-  const avgTeamTackles = players.reduce((s, p) => s + (parseInt(p.tackles) || 0), 0) / (players.length || 1);
+  const activePlayers = validPlayers.filter(p => (parseInt(p.appearances) || 0) > 0);
+  const denominator = activePlayers.length || 1;
 
-  const maxGoals = Math.max(1, ...players.map(p => parseInt(p.goals) || 0));
-  const maxAssists = Math.max(1, ...players.map(p => parseInt(p.assists) || 0));
-  const maxShots = Math.max(1, ...players.map(p => parseInt(p.shots_on_target) || 0));
-  const maxPasses = Math.max(1, ...players.map(p => parseInt(p.accurate_passes) || 0));
-  const maxTackles = Math.max(1, ...players.map(p => parseInt(p.tackles) || 0));
+  const avgTeamGoals = activePlayers.reduce((s, p) => s + (parseInt(p.goals) || 0), 0) / denominator;
+  const avgTeamAssists = activePlayers.reduce((s, p) => s + (parseInt(p.assists) || 0), 0) / denominator;
+  const avgTeamShots = activePlayers.reduce((s, p) => s + (parseInt(p.shots_on_target) || 0), 0) / denominator;
+  const avgTeamPasses = activePlayers.reduce((s, p) => s + (parseInt(p.accurate_passes) || 0), 0) / denominator;
+  const avgTeamTackles = activePlayers.reduce((s, p) => s + (parseInt(p.tackles) || 0), 0) / denominator;
+
+  const maxGoals = Math.max(1, ...validPlayers.map(p => parseInt(p.goals) || 0));
+  const maxAssists = Math.max(1, ...validPlayers.map(p => parseInt(p.assists) || 0));
+  const maxShots = Math.max(1, ...validPlayers.map(p => parseInt(p.shots_on_target) || 0));
+  const maxPasses = Math.max(1, ...validPlayers.map(p => parseInt(p.accurate_passes) || 0));
+  const maxTackles = Math.max(1, ...validPlayers.map(p => parseInt(p.tackles) || 0));
 
   let playerRadarData = null;
   if (selectedPlayer) {
