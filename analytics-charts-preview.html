@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - Analytics Charts CVMC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Adicionando plugin de anotações para a linha de tendência do scatter -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <style>
+        body { background-color: #050505; color: white; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
+    </style>
+</head>
+<body class="p-8 min-h-screen">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <header class="border-b border-white/[0.06] pb-6">
+            <h1 class="text-4xl font-black uppercase tracking-tight text-white mb-2">Preview Offline: Novos Gráficos</h1>
+            <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
+                1. Radar de Estilo de Jogo &nbsp;•&nbsp; 2. Dispersão de Eficiência (xG vs Gols)
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Gráfico 1: Radar -->
+            <div class="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8 hover:border-white/[0.12] transition-colors">
+                <div class="mb-6">
+                    <h3 class="text-[12px] font-black uppercase tracking-[0.2em] text-white">1. Identidade e Estilo</h3>
+                    <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-500 mt-1">Comparativo: Corinthians vs Média da Liga</p>
+                </div>
+                
+                <div class="relative h-80 w-full flex justify-center">
+                    <canvas id="radarChart"></canvas>
+                </div>
+                
+                <div class="mt-6 text-[10px] text-zinc-500 text-center uppercase tracking-widest border-t border-white/[0.06] pt-4">
+                    Os eixos são normalizados de 0 a 100 (Percentil).
+                </div>
+            </div>
+
+            <!-- Gráfico 2: Dispersão -->
+            <div class="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-8 hover:border-white/[0.12] transition-colors">
+                <div class="mb-6">
+                    <h3 class="text-[12px] font-black uppercase tracking-[0.2em] text-white">2. Eficiência de Finalização</h3>
+                    <p class="text-[9px] uppercase tracking-[0.2em] text-zinc-500 mt-1">Expected Goals (xG) vs Gols Marcados Reais</p>
+                </div>
+
+                <div class="relative h-80 w-full flex justify-center">
+                    <canvas id="scatterChart"></canvas>
+                </div>
+                
+                <div class="mt-6 text-[10px] text-zinc-500 text-center uppercase tracking-widest border-t border-white/[0.06] pt-4">
+                    Acima da linha tracejada: superando a expectativa (Eficientes).<br/>
+                    Abaixo da linha: desperdiçando chances.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Configuração Global Chart.js
+        Chart.defaults.color = '#71717a';
+        Chart.defaults.font.family = 'ui-sans-serif, system-ui, sans-serif';
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        Chart.defaults.plugins.tooltip.titleColor = '#fff';
+        Chart.defaults.plugins.tooltip.bodyColor = '#a1a1aa';
+        Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+        Chart.defaults.plugins.tooltip.padding = 12;
+
+        // 1. Gráfico Radar
+        const ctxRadar = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Posse de Bola', 'Chances Criadas (xG)', 'Chutes a Gol', 'Desarmes (Pressão)', 'Defesa Sólida'],
+                datasets: [
+                    {
+                        label: 'Corinthians',
+                        data: [58, 75, 60, 85, 90], // Valores Percentis
+                        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                        borderColor: 'rgba(255, 255, 255, 0.8)',
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#000',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#000',
+                        borderWidth: 2,
+                    },
+                    {
+                        label: 'Média da Liga',
+                        data: [50, 50, 50, 50, 50],
+                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        borderColor: 'rgba(16, 185, 129, 0.4)',
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#000',
+                        borderWidth: 1.5,
+                        borderDash: [5, 5]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255,255,255,0.05)' },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        pointLabels: { 
+                            color: '#a1a1aa', 
+                            font: { size: 10, weight: 'bold', family: 'ui-monospace, monospace' } 
+                        },
+                        ticks: { display: false, min: 0, max: 100 }
+                    }
+                },
+                plugins: {
+                    legend: { 
+                        position: 'bottom',
+                        labels: { color: '#fff', font: { size: 10, weight: 'bold' }, usePointStyle: true } 
+                    }
+                }
+            }
+        });
+
+        // 2. Gráfico de Dispersão (Scatter)
+        const ctxScatter = document.getElementById('scatterChart').getContext('2d');
+        
+        // Dados Mockados
+        const teamsData = [
+            { name: 'Palmeiras', x: 65, y: 72 },
+            { name: 'Flamengo', x: 70, y: 68 },
+            { name: 'Atlético-MG', x: 55, y: 58 },
+            { name: 'Corinthians', x: 45, y: 48 }, // Acima do esperado
+            { name: 'São Paulo', x: 52, y: 50 },
+            { name: 'Fluminense', x: 42, y: 38 },
+            { name: 'Grêmio', x: 60, y: 62 },
+            { name: 'Internacional', x: 58, y: 53 },
+            { name: 'Botafogo', x: 68, y: 75 },
+            { name: 'Vasco', x: 40, y: 35 }
+        ];
+
+        // Separar o Corinthians do resto para estilizá-lo diferente
+        const corinthiansData = teamsData.filter(t => t.name === 'Corinthians');
+        const othersData = teamsData.filter(t => t.name !== 'Corinthians');
+
+        new Chart(ctxScatter, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Corinthians',
+                        data: corinthiansData,
+                        backgroundColor: '#fff',
+                        borderColor: '#000',
+                        borderWidth: 2,
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        pointStyle: 'rectRot' // Diamante
+                    },
+                    {
+                        label: 'Outros Times',
+                        data: othersData,
+                        backgroundColor: 'rgba(255,255,255,0.2)',
+                        borderColor: 'rgba(255,255,255,0.4)',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'EXPECTED GOALS (xG)', color: '#71717a', font: { size: 10, weight: 'bold', family: 'ui-monospace' } },
+                        grid: { color: 'rgba(255,255,255,0.03)' },
+                        min: 30, max: 80
+                    },
+                    y: {
+                        title: { display: true, text: 'GOLS MARCADOS', color: '#71717a', font: { size: 10, weight: 'bold', family: 'ui-monospace' } },
+                        grid: { color: 'rgba(255,255,255,0.03)' },
+                        min: 30, max: 80
+                    }
+                },
+                plugins: {
+                    legend: { 
+                        position: 'bottom',
+                        labels: { color: '#fff', font: { size: 10, weight: 'bold' }, usePointStyle: true }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => {
+                                const team = ctx.raw;
+                                return ` ${team.name} • xG: ${team.x} | Gols: ${team.y}`;
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: 30, xMax: 80,
+                                yMin: 30, yMax: 80,
+                                borderColor: 'rgba(255,255,255,0.15)',
+                                borderDash: [5, 5],
+                                borderWidth: 2,
+                                label: { 
+                                    content: 'xG = Gols (Equilíbrio)', 
+                                    display: true, 
+                                    position: 'start', 
+                                    color: '#71717a',
+                                    backgroundColor: 'transparent',
+                                    font: { size: 10, weight: 'normal' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

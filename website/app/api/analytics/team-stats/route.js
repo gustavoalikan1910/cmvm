@@ -28,11 +28,11 @@ export async function GET(request) {
           ),
       season
         ? client.query(
-            `SELECT team_name, goals_for FROM gold.obt_team_season_stats ${compSeasonFilter} ORDER BY goals_for DESC`,
+            `SELECT team_name, goals_for, goals_against, possession, xg_for, shots_on_target, tackles_for FROM gold.obt_team_season_stats ${compSeasonFilter} ORDER BY goals_for DESC`,
             [season]
           )
         : client.query(
-            `SELECT team_name, goals_for FROM gold.obt_team_season_stats ${compSeasonFilter} ORDER BY goals_for DESC`
+            `SELECT team_name, goals_for, goals_against, possession, xg_for, shots_on_target, tackles_for FROM gold.obt_team_season_stats ${compSeasonFilter} ORDER BY goals_for DESC`
           ),
     ]);
     client.release();

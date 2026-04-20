@@ -2,6 +2,40 @@
 
 import { useState, useCallback } from 'react';
 import { AnimatedNumber } from '@/components/HomeAnimations';
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+  LinearScale,
+  ScatterController
+} from 'chart.js';
+import { Radar, Scatter } from 'react-chartjs-2';
+import annotationPlugin from 'chartjs-plugin-annotation';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+  LinearScale,
+  ScatterController,
+  annotationPlugin
+);
+
+ChartJS.defaults.color = '#71717a';
+ChartJS.defaults.font.family = 'ui-sans-serif, system-ui, sans-serif';
+ChartJS.defaults.plugins.tooltip.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+ChartJS.defaults.plugins.tooltip.titleColor = '#fff';
+ChartJS.defaults.plugins.tooltip.bodyColor = '#a1a1aa';
+ChartJS.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
+ChartJS.defaults.plugins.tooltip.borderWidth = 1;
+ChartJS.defaults.plugins.tooltip.padding = 12;
 
 const POSITION_MAP = {
   'Todos': null,
@@ -16,6 +50,15 @@ function fmt(val, decimals = 0) {
   const n = parseFloat(val);
   if (isNaN(n)) return '—';
   return decimals > 0 ? n.toFixed(decimals) : Math.round(n).toString();
+}
+
+function getPercentile(val, allVals, invert = false) {
+  if (!allVals || allVals.length === 0) return 0;
+  const sorted = [...allVals].sort((a, b) => a - b);
+  let rank = sorted.findIndex(v => v >= val);
+  if (rank === -1) rank = sorted.length - 1;
+  const pct = (rank / Math.max(1, sorted.length - 1)) * 100;
+  return invert ? 100 - pct : pct;
 }
 
 function KpiCard({ label, value, sub, progress }) {
@@ -91,6 +134,105 @@ function TabTimes({ team, comparison, selectedTeam }) {
     );
   }
 
+  // Radar Chart Data
+  const pPossession = getPercentile(team.possession, comparison.map(c => parseFloat(c.possession) || 0));
+  const pXg = getPercentile(team.xg_for, comparison.map(c => parseFloat(c.xg_for) || 0));
+  const pShots = getPercentile(team.shots_on_target, comparison.map(c => parseInt(c.shots_on_target) || 0));
+  const pTackles = getPercentile(team.tackles_for, comparison.map(c => parseInt(c.tackles_for) || 0));
+  const pDefense = getPercentile(team.goals_against, comparison.map(c => parseInt(c.goals_against) || 0), true);
+
+  const radarData = {
+    labels: ['Posse de Bola', 'Chances (xG)', 'Chutes a Gol', 'Desarmes', 'Defesa Sólida'],
+    datasets: [
+      {
+        label: team.team_name,
+        data: [pPossession, pXg, pShots, pTackles, pDefense],
+        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+        borderColor: 'rgba(255, 255, 255, 0.8)',
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#000',
+        borderWidth: 2,
+      },
+      {
+        label: 'Média da Liga',
+        data: [50, 50, 50, 50, 50],
+        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+        borderColor: 'rgba(16, 185, 129, 0.4)',
+        pointBackgroundColor: '#10b981',
+        pointBorderColor: '#000',
+        borderWidth: 1.5,
+        borderDash: [5, 5]
+      }
+    ]
+  };
+
+  const radarOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        angleLines: { color: 'rgba(255,255,255,0.05)' },
+        grid: { color: 'rgba(255,255,255,0.05)' },
+        pointLabels: { color: '#a1a1aa', font: { size: 10, weight: 'bold' } },
+        ticks: { display: false, min: 0, max: 100 }
+      }
+    },
+    plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: { size: 10, weight: 'bold' }, usePointStyle: true } } }
+  };
+
+  // Scatter Chart Data
+  const scatterData = {
+    datasets: [
+      {
+        label: team.team_name,
+        data: comparison.filter(c => c.team_name === selectedTeam).map(c => ({ x: parseFloat(c.xg_for) || 0, y: parseFloat(c.goals_for) || 0, team: c.team_name })),
+        backgroundColor: '#fff',
+        borderColor: '#000',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10,
+        pointStyle: 'rectRot'
+      },
+      {
+        label: 'Outros Times',
+        data: comparison.filter(c => c.team_name !== selectedTeam).map(c => ({ x: parseFloat(c.xg_for) || 0, y: parseFloat(c.goals_for) || 0, team: c.team_name })),
+        backgroundColor: 'rgba(255,255,255,0.2)',
+        borderColor: 'rgba(255,255,255,0.4)',
+        pointRadius: 5,
+        pointHoverRadius: 7
+      }
+    ]
+  };
+
+  const maxX = Math.max(...comparison.map(c => parseFloat(c.xg_for) || 0)) + 5;
+  const maxY = Math.max(...comparison.map(c => parseFloat(c.goals_for) || 0)) + 5;
+
+  const scatterOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: { title: { display: true, text: 'EXPECTED GOALS (xG)' }, grid: { color: 'rgba(255,255,255,0.03)' }, min: 0, max: maxX },
+      y: { title: { display: true, text: 'GOLS MARCADOS' }, grid: { color: 'rgba(255,255,255,0.03)' }, min: 0, max: maxY }
+    },
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#fff', font: { size: 10, weight: 'bold' }, usePointStyle: true } },
+      tooltip: { callbacks: { label: (ctx) => ` ${ctx.raw.team} • xG: ${ctx.raw.x.toFixed(1)} | Gols: ${ctx.raw.y}` } },
+      annotation: {
+        annotations: {
+          line1: {
+            type: 'line',
+            xMin: 0, xMax: Math.max(maxX, maxY),
+            yMin: 0, yMax: Math.max(maxX, maxY),
+            borderColor: 'rgba(255,255,255,0.15)',
+            borderDash: [5, 5],
+            borderWidth: 2,
+            label: { content: 'xG = Gols (Equilíbrio)', display: true, position: 'start', color: '#71717a', backgroundColor: 'transparent', font: { size: 10 } }
+          }
+        }
+      }
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="inline-flex items-center gap-2 bg-white/[0.02] border border-white/[0.06] rounded-lg px-3 py-1.5 font-mono text-[9px] text-zinc-500 mb-2">
@@ -101,6 +243,20 @@ function TabTimes({ team, comparison, selectedTeam }) {
       <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-700 mb-3">
         {team.team_name} — Resumo da Temporada
       </p>
+
+      {/* New Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6">
+          <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-1">Identidade e Estilo</p>
+          <p className="text-[8px] text-zinc-700 uppercase tracking-widest mb-5">Comparativo com a Média da Liga (Percentis)</p>
+          <div className="relative h-64 w-full"><Radar data={radarData} options={radarOptions} /></div>
+        </div>
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6">
+          <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-1">Eficiência de Finalização</p>
+          <p className="text-[8px] text-zinc-700 uppercase tracking-widest mb-5">Expected Goals (xG) vs Gols Marcados</p>
+          <div className="relative h-64 w-full"><Scatter data={scatterData} options={scatterOptions} /></div>
+        </div>
+      </div>
 
       {/* KPIs principais */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -130,14 +286,12 @@ function TabTimes({ team, comparison, selectedTeam }) {
         </div>
       </div>
 
-      {/* Chutes */}
       <div className="grid grid-cols-3 gap-4">
         <KpiCard label="Total de Chutes" value={fmt(team.shots)} sub="shots" />
         <KpiCard label="Chutes a Gol" value={fmt(team.shots_on_target)} sub="shots_on_target" />
         <KpiCard label="Chutes Fora" value={fmt(team.shots_off_target)} sub="shots_off_target" />
       </div>
 
-      {/* Bar chart comparativo */}
       <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6">
         <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-5">
           Comparativo — Gols Marcados · Todos os Times
@@ -145,7 +299,6 @@ function TabTimes({ team, comparison, selectedTeam }) {
         <BarChart data={comparison} selectedTeam={selectedTeam} />
       </div>
 
-      {/* xG + Métricas adicionais */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6">
           <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-3">Expected Goals (xG)</p>
@@ -193,6 +346,7 @@ function TabTimes({ team, comparison, selectedTeam }) {
 function TabJogadores({ players }) {
   const [posFilter, setPosFilter] = useState('Todos');
   const [sortConfig, setSortConfig] = useState({ key: 'appearances', direction: 'desc' });
+  const [selectedPlayerName, setSelectedPlayerName] = useState('');
 
   const SORT_MAP = {
     'Jogador': 'player_name',
@@ -212,7 +366,6 @@ function TabJogadores({ players }) {
     if (sortConfig.key === key) {
       setSortConfig({ key, direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' });
     } else {
-      // Default string columns (like player_name) to asc, numbers to desc
       setSortConfig({ key, direction: key === 'player_name' ? 'asc' : 'desc' });
     }
   };
@@ -246,6 +399,76 @@ function TabJogadores({ players }) {
     : 0;
   const totalWithAppearances = players.filter(p => (parseInt(p.appearances) || 0) > 0).length;
 
+  // Radar logic
+  const validPlayers = filteredPlayers.length > 0 ? filteredPlayers : players;
+  const selectedPlayer = validPlayers.find(p => p.player_name === selectedPlayerName) || validPlayers[0];
+
+  const avgTeamGoals = players.reduce((s, p) => s + (parseInt(p.goals) || 0), 0) / (players.length || 1);
+  const avgTeamAssists = players.reduce((s, p) => s + (parseInt(p.assists) || 0), 0) / (players.length || 1);
+  const avgTeamShots = players.reduce((s, p) => s + (parseInt(p.shots_on_target) || 0), 0) / (players.length || 1);
+  const avgTeamPasses = players.reduce((s, p) => s + (parseInt(p.accurate_passes) || 0), 0) / (players.length || 1);
+  const avgTeamTackles = players.reduce((s, p) => s + (parseInt(p.tackles) || 0), 0) / (players.length || 1);
+
+  const maxGoals = Math.max(1, ...players.map(p => parseInt(p.goals) || 0));
+  const maxAssists = Math.max(1, ...players.map(p => parseInt(p.assists) || 0));
+  const maxShots = Math.max(1, ...players.map(p => parseInt(p.shots_on_target) || 0));
+  const maxPasses = Math.max(1, ...players.map(p => parseInt(p.accurate_passes) || 0));
+  const maxTackles = Math.max(1, ...players.map(p => parseInt(p.tackles) || 0));
+
+  let playerRadarData = null;
+  if (selectedPlayer) {
+    playerRadarData = {
+      labels: ['Gols', 'Assistências', 'Chutes no Alvo', 'Passes Certos', 'Desarmes'],
+      datasets: [
+        {
+          label: selectedPlayer.player_name,
+          data: [
+            ((parseInt(selectedPlayer.goals) || 0) / maxGoals) * 100,
+            ((parseInt(selectedPlayer.assists) || 0) / maxAssists) * 100,
+            ((parseInt(selectedPlayer.shots_on_target) || 0) / maxShots) * 100,
+            ((parseInt(selectedPlayer.accurate_passes) || 0) / maxPasses) * 100,
+            ((parseInt(selectedPlayer.tackles) || 0) / maxTackles) * 100,
+          ],
+          backgroundColor: 'rgba(255, 255, 255, 0.15)',
+          borderColor: 'rgba(255, 255, 255, 0.8)',
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#000',
+          borderWidth: 2,
+        },
+        {
+          label: 'Média do Time',
+          data: [
+            (avgTeamGoals / maxGoals) * 100,
+            (avgTeamAssists / maxAssists) * 100,
+            (avgTeamShots / maxShots) * 100,
+            (avgTeamPasses / maxPasses) * 100,
+            (avgTeamTackles / maxTackles) * 100,
+          ],
+          backgroundColor: 'rgba(16, 185, 129, 0.05)',
+          borderColor: 'rgba(16, 185, 129, 0.4)',
+          pointBackgroundColor: '#10b981',
+          pointBorderColor: '#000',
+          borderWidth: 1.5,
+          borderDash: [5, 5]
+        }
+      ]
+    };
+  }
+
+  const playerRadarOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        angleLines: { color: 'rgba(255,255,255,0.05)' },
+        grid: { color: 'rgba(255,255,255,0.05)' },
+        pointLabels: { color: '#a1a1aa', font: { size: 9, weight: 'bold' } },
+        ticks: { display: false, min: 0, max: 100 }
+      }
+    },
+    plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: { size: 10, weight: 'bold' }, usePointStyle: true } } }
+  };
+
   return (
     <div className="space-y-4">
       <div className="inline-flex items-center gap-2 bg-white/[0.02] border border-white/[0.06] rounded-lg px-3 py-1.5 font-mono text-[9px] text-zinc-500 mb-2">
@@ -253,7 +476,6 @@ function TabJogadores({ players }) {
         <span>gold.obt_player_season_stats · jogadores do elenco</span>
       </div>
 
-      {/* KPIs do elenco */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <KpiCard label="Total de Gols" value={fmt(totalGoals)} sub="SUM(goals)" />
         <KpiCard label="Total Assistências" value={fmt(totalAssists)} sub="SUM(assists)" />
@@ -261,101 +483,138 @@ function TabJogadores({ players }) {
         <KpiCard label="Jogadores Usados" value={fmt(totalWithAppearances)} sub="appearances > 0" />
       </div>
 
-      {/* Chips de posição */}
-      <div className="flex flex-wrap gap-2">
-        {Object.keys(POSITION_MAP).map(pos => (
-          <button
-            key={pos}
-            onClick={() => setPosFilter(pos)}
-            className={`px-4 py-1.5 rounded-full border text-[9px] font-bold uppercase tracking-[0.15em] transition-all duration-200
-              ${posFilter === pos
-                ? 'bg-white text-black border-white'
-                : 'bg-white/[0.03] border-white/[0.08] text-zinc-500 hover:text-zinc-300'
-              }`}
-          >
-            {pos}
-          </button>
-        ))}
-      </div>
-
-      {/* Tabela de jogadores */}
-      <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6">
-        <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-5">
-          Estatísticas por Jogador
-        </p>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr>
-                {['Jogador', 'Jogos', 'Gols', 'Assist', 'Chutes ✓/✗', 'Passes ✓/✗', 'Desarmes', 'Intercep.', '🟡/🔴', 'Rating'].map(h => (
-                  <th 
-                    key={h} 
-                    onClick={() => handleSort(h)}
-                    className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-700 text-left px-3 pb-3 border-b border-white/[0.06] first:pl-0 cursor-pointer hover:text-white transition-colors group select-none"
-                  >
-                    <div className="flex items-center gap-1">
-                      {h}
-                      <span className={`text-[10px] ${sortConfig.key === SORT_MAP[h] ? 'text-zinc-400' : 'text-transparent group-hover:text-zinc-600'}`}>
-                        {sortConfig.key === SORT_MAP[h] ? (sortConfig.direction === 'asc' ? '↑' : '↓') : '↕'}
-                      </span>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPlayers.map((p, i) => (
-                <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
-                  <td className="py-3.5 pl-0 pr-3 border-b border-white/[0.04] group-last:border-0">
-                    <span className="text-white font-bold text-sm">{p.player_name}</span>
-                    {p.position && (
-                      <span className="ml-2 px-2 py-0.5 border border-white/10 rounded text-[8px] text-zinc-500 tracking-widest">
-                        {p.position}
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">{p.appearances}</td>
-                  <td className="py-3.5 px-3 border-b border-white/[0.04] group-last:border-0">
-                    <span className="text-white font-black text-sm">{p.goals}</span>
-                  </td>
-                  <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">{p.assists}</td>
-                  <td className="py-3.5 px-3 text-xs border-b border-white/[0.04] group-last:border-0">
-                    <span className="text-white font-bold">{p.shots_on_target}</span>
-                    <span className="text-zinc-700 mx-0.5">/</span>
-                    <span className="text-zinc-500">{p.shots_off_target}</span>
-                  </td>
-                  <td className="py-3.5 px-3 text-xs border-b border-white/[0.04] group-last:border-0">
-                    <span className="text-white font-bold">{p.accurate_passes}</span>
-                    <span className="text-zinc-700 mx-0.5">/</span>
-                    <span className="text-zinc-500">{p.passes ? p.passes - p.accurate_passes : '—'}</span>
-                  </td>
-                  <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">{p.tackles}</td>
-                  <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">{p.interceptions}</td>
-                  <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">
-                    <span className="text-yellow-400">{p.yellow_cards}</span>
-                    <span className="text-zinc-700 mx-0.5">/</span>
-                    <span className="text-red-500">{p.red_cards}</span>
-                  </td>
-                  <td className="py-3.5 px-3 border-b border-white/[0.04] group-last:border-0">
-                    <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.05] border border-white/10 text-white font-black text-xs">
-                      {fmt(p.rating, 1)}
-                    </span>
-                  </td>
-                </tr>
+      <div className="flex flex-col lg:flex-row gap-6 mt-6">
+        <div className="lg:w-1/3 bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6">
+          <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-1">Análise Individual</p>
+          <p className="text-[8px] text-zinc-700 uppercase tracking-widest mb-5">Selecione na tabela para comparar</p>
+          
+          <div className="mb-4">
+            <select
+              value={selectedPlayer?.player_name || ''}
+              onChange={(e) => setSelectedPlayerName(e.target.value)}
+              className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm font-bold text-white cursor-pointer focus:outline-none focus:border-white/30"
+            >
+              {validPlayers.map(p => (
+                <option key={p.player_name} value={p.player_name} className="bg-zinc-900">
+                  {p.player_name}
+                </option>
               ))}
-              {filteredPlayers.length === 0 && (
-                <tr>
-                  <td colSpan={10} className="py-8 text-center text-zinc-700 text-sm">
-                    Nenhum jogador encontrado para esta posição.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+            </select>
+          </div>
+
+          <div className="relative h-64 w-full">
+            {playerRadarData && <Radar data={playerRadarData} options={playerRadarOptions} />}
+          </div>
+          <p className="mt-4 text-[9px] text-zinc-800 tracking-[0.15em] uppercase text-center">
+            Métricas normalizadas (Max = 100%)
+          </p>
         </div>
-        <p className="mt-4 text-[9px] text-zinc-800 tracking-[0.15em] uppercase">
-          Chutes ✓ = shots_on_target · ✗ = shots_off_target &nbsp;|&nbsp; Passes ✓ = accurate_passes · ✗ = passes − accurate_passes
-        </p>
+
+        <div className="lg:w-2/3 flex flex-col gap-4">
+          <div className="flex flex-wrap gap-2">
+            {Object.keys(POSITION_MAP).map(pos => (
+              <button
+                key={pos}
+                onClick={() => {
+                  setPosFilter(pos);
+                  setSelectedPlayerName(''); // reset radar
+                }}
+                className={`px-4 py-1.5 rounded-full border text-[9px] font-bold uppercase tracking-[0.15em] transition-all duration-200
+                  ${posFilter === pos
+                    ? 'bg-white text-black border-white'
+                    : 'bg-white/[0.03] border-white/[0.08] text-zinc-500 hover:text-zinc-300'
+                  }`}
+              >
+                {pos}
+              </button>
+            ))}
+          </div>
+
+          <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6 flex-1 overflow-hidden">
+            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-5">
+              Estatísticas por Jogador
+            </p>
+            <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
+              <table className="w-full border-collapse">
+                <thead className="sticky top-0 bg-[#050505] z-10">
+                  <tr>
+                    {['Jogador', 'Jogos', 'Gols', 'Assist', 'Chutes ✓/✗', 'Passes ✓/✗', 'Desarmes', 'Intercep.', '🟡/🔴', 'Rating'].map(h => (
+                      <th 
+                        key={h} 
+                        onClick={() => handleSort(h)}
+                        className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-700 text-left px-3 pb-3 border-b border-white/[0.06] first:pl-0 cursor-pointer hover:text-white transition-colors group select-none"
+                      >
+                        <div className="flex items-center gap-1">
+                          {h}
+                          <span className={`text-[10px] ${sortConfig.key === SORT_MAP[h] ? 'text-zinc-400' : 'text-transparent group-hover:text-zinc-600'}`}>
+                            {sortConfig.key === SORT_MAP[h] ? (sortConfig.direction === 'asc' ? '↑' : '↓') : '↕'}
+                          </span>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredPlayers.map((p, i) => {
+                    const isSelected = p.player_name === selectedPlayer?.player_name;
+                    return (
+                    <tr 
+                      key={i} 
+                      onClick={() => setSelectedPlayerName(p.player_name)}
+                      className={`group cursor-pointer transition-colors ${isSelected ? 'bg-white/[0.08]' : 'hover:bg-white/[0.04]'}`}
+                    >
+                      <td className="py-3.5 pl-0 pr-3 border-b border-white/[0.04] group-last:border-0">
+                        <span className="text-white font-bold text-sm">{p.player_name}</span>
+                        {p.position && (
+                          <span className="ml-2 px-2 py-0.5 border border-white/10 rounded text-[8px] text-zinc-500 tracking-widest">
+                            {p.position}
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">{p.appearances}</td>
+                      <td className="py-3.5 px-3 border-b border-white/[0.04] group-last:border-0">
+                        <span className="text-white font-black text-sm">{p.goals}</span>
+                      </td>
+                      <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">{p.assists}</td>
+                      <td className="py-3.5 px-3 text-xs border-b border-white/[0.04] group-last:border-0">
+                        <span className="text-white font-bold">{p.shots_on_target}</span>
+                        <span className="text-zinc-700 mx-0.5">/</span>
+                        <span className="text-zinc-500">{p.shots_off_target}</span>
+                      </td>
+                      <td className="py-3.5 px-3 text-xs border-b border-white/[0.04] group-last:border-0">
+                        <span className="text-white font-bold">{p.accurate_passes}</span>
+                        <span className="text-zinc-700 mx-0.5">/</span>
+                        <span className="text-zinc-500">{p.passes ? p.passes - p.accurate_passes : '—'}</span>
+                      </td>
+                      <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">{p.tackles}</td>
+                      <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">{p.interceptions}</td>
+                      <td className="py-3.5 px-3 text-zinc-500 text-xs border-b border-white/[0.04] group-last:border-0">
+                        <span className="text-yellow-400">{p.yellow_cards}</span>
+                        <span className="text-zinc-700 mx-0.5">/</span>
+                        <span className="text-red-500">{p.red_cards}</span>
+                      </td>
+                      <td className="py-3.5 px-3 border-b border-white/[0.04] group-last:border-0">
+                        <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.05] border border-white/10 text-white font-black text-xs">
+                          {fmt(p.rating, 1)}
+                        </span>
+                      </td>
+                    </tr>
+                  )})}
+                  {filteredPlayers.length === 0 && (
+                    <tr>
+                      <td colSpan={10} className="py-8 text-center text-zinc-700 text-sm">
+                        Nenhum jogador encontrado para esta posição.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-4 text-[9px] text-zinc-800 tracking-[0.15em] uppercase">
+              Chutes ✓ = shots_on_target · ✗ = shots_off_target &nbsp;|&nbsp; Passes ✓ = accurate_passes · ✗ = passes − accurate_passes
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

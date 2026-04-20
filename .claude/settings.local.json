@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -ExecutionPolicy Bypass -File sync-skills.ps1)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\PuTTY\\\\plink.exe' -i 'C:\\\\Users\\\\GustavoAlikanFeverei\\\\Downloads\\\\private_key_oracle.ppk' -batch ubuntu@163.176.241.242 'cd ~/CVMC-data && git fetch --prune && git checkout main && git pull'\")",
+      "Bash(npm run *)",
+      "Bash(powershell -Command \"& 'C:\\\\Program Files\\\\PuTTY\\\\plink.exe' -i 'C:\\\\Users\\\\GustavoAlikanFeverei\\\\Downloads\\\\private_key_oracle.ppk' -batch ubuntu@163.176.241.242 'cd ~/CVMC-data && git fetch --prune && git checkout feat/analytics-page && git pull && docker compose up -d --build website'\")"
+    ]
+  }
+}

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics Page — Layout Options</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #050505;
+    color: #fff;
+    font-family: 'Inter', system-ui, sans-serif;
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    color: #555;
+    font-size: 13px;
+    margin-bottom: 40px;
+    letter-spacing: 0.05em;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1200px;
+  }
+
+  .option-card {
+    border: 1px solid #1a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    background: #0a0a0a;
+  }
+  .option-card:hover {
+    border-color: #444;
+    transform: translateY(-2px);
+  }
+  .option-card.selected {
+    border-color: #fff;
+    box-shadow: 0 0 30px rgba(255,255,255,0.08);
+  }
+
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid #111;
+  }
+  .option-letter {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    color: #888;
+    letter-spacing: 0;
+  }
+  .option-card.selected .option-letter {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+  }
+  .option-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+  }
+  .option-card.selected .option-title { color: #fff; }
+
+  /* MOCKUP AREA */
+  .mockup {
+    padding: 16px;
+    min-height: 480px;
+    position: relative;
+  }
+
+  /* ─── Shared micro-components ─── */
+  .m-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #1f1f1f;
+    background: #0d0d0d;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  .m-dot { width: 5px; height: 5px; border-radius: 50%; background: #3d3; }
+  .m-heading {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, #fff 0%, #555 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+  .m-label {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #444;
+    font-weight: 700;
+  }
+  .m-value {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin: 4px 0 2px;
+  }
+  .m-sub {
+    font-size: 8px;
+    color: #333;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .m-card {
+    background: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
+    padding: 14px;
+  }
+  .m-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .m-bar-label { font-size: 8px; color: #555; width: 70px; text-align: right; }
+  .m-bar-track {
+    flex: 1;
+    height: 4px;
+    background: #1a1a1a;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .m-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #333, #888);
+    border-radius: 99px;
+  }
+  .m-table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #111;
+    font-size: 9px;
+  }
+  .m-table-row:last-child { border: 0; }
+  .m-table-name { color: #888; }
+  .m-table-val { color: #fff; font-weight: 700; font-size: 10px; }
+  .m-chip {
+    display: inline-block;
+    background: #111;
+    border: 1px solid #1f1f1f;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 8px;
+    color: #555;
+    margin-right: 4px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+  }
+  .m-chip.active { background: #fff; color: #000; border-color: #fff; }
+  .m-tab {
+    display: inline-block;
+    padding: 5px 12px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #444;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .m-tab.active { color: #fff; border-color: #fff; }
+  .m-tabs { border-bottom: 1px solid #1a1a1a; margin-bottom: 12px; }
+  .m-chart {
+    height: 60px;
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .m-chart-bar {
+    flex: 1;
+    background: #1a1a1a;
+    border-radius: 4px 4px 0 0;
+    transition: background 0.2s;
+  }
+  .m-section-title {
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .m-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .m-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .m-grid-12 { display: grid; grid-template-columns: 5fr 7fr; gap: 8px; align-items: start; }
+  .m-select {
+    background: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 9px;
+    color: #666;
+    letter-spacing: 0.1em;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* description below each card */
+  .option-desc {
+    padding: 12px 20px 16px;
+    border-top: 1px solid #111;
+  }
+  .option-desc p {
+    font-size: 11px;
+    color: #444;
+    line-height: 1.6;
+  }
+  .option-desc strong { color: #888; }
+
+  /* selection bar */
+  #selection-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #0a0a0a;
+    border-top: 1px solid #1a1a1a;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #555;
+  }
+  #selection-text { color: #888; }
+  #selection-text span { color: #fff; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<h1>Analytics Page — CVMC</h1>
+<h2>Qual estrutura de página faz mais sentido?</h2>
+<p class="subtitle">Clique numa opção para selecionar. Depois me fala no chat o que achou.</p>
+
+<div class="options-grid">
+
+  <!-- ══════════ OPTION A ══════════ -->
+  <div class="option-card" id="opt-a" onclick="select('a')">
+    <div class="option-label">
+      <div class="option-letter">A</div>
+      <div class="option-title">Artilheiros + Classificação</div>
+    </div>
+    <div class="mockup">
+      <div class="m-pill"><span class="m-dot"></span>Analytics // Brasileirão 2026</div>
+      <div class="m-heading">ANALYTICS</div>
+
+      <!-- KPIs -->
+      <div class="m-grid-3" style="margin-bottom:10px">
+        <div class="m-card">
+          <div class="m-label">Gols Totais</div>
+          <div class="m-value">312</div>
+          <div class="m-sub">Na temporada</div>
+        </div>
+        <div class="m-card">
+          <div class="m-label">Jogadores</div>
+          <div class="m-value">487</div>
+          <div class="m-sub">Com minutos jogados</div>
+        </div>
+        <div class="m-card">
+          <div class="m-label">Rodadas</div>
+          <div class="m-value">14</div>
+          <div class="m-sub">Disputadas</div>
+        </div>
+      </div>
+
+      <!-- Top scorers -->
+      <div class="m-section-title">Top Artilheiros</div>
+      <div class="m-card" style="margin-bottom:10px">
+        <div class="m-table-row"><span class="m-table-name">1. Yuri Alberto</span><span class="m-table-val">8 gols</span></div>
+        <div class="m-table-row"><span class="m-table-name">2. Memphis</span><span class="m-table-val">7 gols</span></div>
+        <div class="m-table-row"><span class="m-table-name">3. Vegetti</span><span class="m-table-val">6 gols</span></div>
+        <div class="m-table-row"><span class="m-table-name">4. Flaco López</span><span class="m-table-val">6 gols</span></div>
+      </div>
+
+      <!-- Classificação -->
+      <div class="m-section-title">Classificação</div>
+      <div class="m-card">
+        <div class="m-table-row">
+          <span class="m-table-name">1. Flamengo</span>
+          <span class="m-table-val">29 pts</span>
+        </div>
+        <div class="m-table-row">
+          <span class="m-table-name">2. Palmeiras</span>
+          <span class="m-table-val">26 pts</span>
+        </div>
+        <div class="m-table-row">
+          <span class="m-table-name">3. Corinthians</span>
+          <span class="m-table-val">24 pts</span>
+        </div>
+      </div>
+    </div>
+    <div class="option-desc">
+      <p><strong>Foco em futebol.</strong> As duas informações mais procuradas por qualquer torcedor — quem tá goleando e onde seu time tá na tabela. Simples, direto, sem filtros.</p>
+    </div>
+  </div>
+
+  <!-- ══════════ OPTION B ══════════ -->
+  <div class="option-card" id="opt-b" onclick="select('b')">
+    <div class="option-label">
+      <div class="option-letter">B</div>
+      <div class="option-title">Comparador de Times</div>
+    </div>
+    <div class="mockup">
+      <div class="m-pill"><span class="m-dot"></span>Analytics // Brasileirão 2026</div>
+      <div class="m-heading">ANALYTICS</div>
+
+      <!-- Seletor -->
+      <div class="m-grid-2" style="margin-bottom:10px">
+        <select class="m-select"><option>Corinthians</option></select>
+        <select class="m-select"><option>Flamengo</option></select>
+      </div>
+
+      <!-- KPI comparativo -->
+      <div class="m-section-title">Comparativo — Temporada 2026</div>
+      <div class="m-card" style="margin-bottom:10px">
+        <div class="m-bar-row">
+          <div class="m-bar-label">Gols</div>
+          <div class="m-bar-track"><div class="m-bar-fill" style="width:62%"></div></div>
+          <div style="font-size:9px;color:#777;width:30px">18 vs 24</div>
+        </div>
+        <div class="m-bar-row">
+          <div class="m-bar-label">Posse</div>
+          <div class="m-bar-track"><div class="m-bar-fill" style="width:48%"></div></div>
+          <div style="font-size:9px;color:#777;width:50px">51% vs 58%</div>
+        </div>
+        <div class="m-bar-row">
+          <div class="m-bar-label">xG</div>
+          <div class="m-bar-track"><div class="m-bar-fill" style="width:55%"></div></div>
+          <div style="font-size:9px;color:#777;width:50px">17.3 vs 22.1</div>
+        </div>
+        <div class="m-bar-row">
+          <div class="m-bar-label">Chutes/jogo</div>
+          <div class="m-bar-track"><div class="m-bar-fill" style="width:70%"></div></div>
+          <div style="font-size:9px;color:#777;width:50px">13.2 vs 16</div>
+        </div>
+      </div>
+
+      <!-- Mini chart -->
+      <div class="m-section-title">Gols por Rodada</div>
+      <div class="m-card">
+        <div class="m-chart">
+          <div class="m-chart-bar" style="height:30%"></div>
+          <div class="m-chart-bar" style="height:60%"></div>
+          <div class="m-chart-bar" style="height:45%"></div>
+          <div class="m-chart-bar" style="height:80%"></div>
+          <div class="m-chart-bar" style="height:55%"></div>
+          <div class="m-chart-bar" style="height:70%"></div>
+          <div class="m-chart-bar" style="height:40%"></div>
+          <div class="m-chart-bar" style="height:90%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="option-desc">
+      <p><strong>Foco em análise.</strong> O usuário escolhe dois times e compara estatísticas lado a lado. Demonstra domínio das tabelas Gold e SQL com filtros dinâmicos.</p>
+    </div>
+  </div>
+
+  <!-- ══════════ OPTION C ══════════ -->
+  <div class="option-card" id="opt-c" onclick="select('c')">
+    <div class="option-label">
+      <div class="option-letter">C</div>
+      <div class="option-title">Dashboard Completo com Abas</div>
+    </div>
+    <div class="mockup">
+      <div class="m-pill"><span class="m-dot"></span>Analytics // Brasileirão 2026</div>
+      <div class="m-heading">ANALYTICS</div>
+
+      <!-- Tabs -->
+      <div class="m-tabs">
+        <span class="m-tab active">Visão Geral</span>
+        <span class="m-tab">Artilheiros</span>
+        <span class="m-tab">Times</span>
+        <span class="m-tab">Comparar</span>
+      </div>
+
+      <!-- KPIs topo -->
+      <div class="m-grid-3" style="margin-bottom:10px">
+        <div class="m-card">
+          <div class="m-label">Gols Totais</div>
+          <div class="m-value" style="font-size:22px">312</div>
+        </div>
+        <div class="m-card">
+          <div class="m-label">Média xG</div>
+          <div class="m-value" style="font-size:22px">2.4</div>
+        </div>
+        <div class="m-card">
+          <div class="m-label">Uptime DAG</div>
+          <div class="m-value" style="font-size:22px">100%</div>
+        </div>
+      </div>
+
+      <!-- Artilheiro + Tabela lado a lado -->
+      <div class="m-grid-12">
+        <div>
+          <div class="m-section-title">Top 3 Goleadores</div>
+          <div class="m-card" style="margin-bottom:8px">
+            <div class="m-table-row"><span class="m-table-name">Yuri Alberto</span><span class="m-table-val">8 ⚽</span></div>
+            <div class="m-table-row"><span class="m-table-name">Memphis</span><span class="m-table-val">7 ⚽</span></div>
+            <div class="m-table-row"><span class="m-table-name">Vegetti</span><span class="m-table-val">6 ⚽</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="m-section-title">Posse de Bola — Top Times</div>
+          <div class="m-card">
+            <div class="m-bar-row">
+              <div class="m-bar-label">Flamengo</div>
+              <div class="m-bar-track"><div class="m-bar-fill" style="width:78%"></div></div>
+            </div>
+            <div class="m-bar-row">
+              <div class="m-bar-label">Palmeiras</div>
+              <div class="m-bar-track"><div class="m-bar-fill" style="width:71%"></div></div>
+            </div>
+            <div class="m-bar-row">
+              <div class="m-bar-label">Corinthians</div>
+              <div class="m-bar-track"><div class="m-bar-fill" style="width:60%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtro chips -->
+      <div style="margin-top:10px">
+        <span class="m-chip active">Temporada 2026</span>
+        <span class="m-chip">Todos os times</span>
+        <span class="m-chip">Gols + Assists</span>
+      </div>
+    </div>
+    <div class="option-desc">
+      <p><strong>Foco em portfólio.</strong> Abas separam contextos: visão geral, artilheiros, times e comparador. Mais complexo de implementar, mas mostra mais maturidade de produto.</p>
+    </div>
+  </div>
+
+</div>
+
+<div id="selection-bar">
+  <span id="selection-text">Nenhuma opção selecionada ainda</span>
+  <span style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#333">Responda no chat depois de escolher</span>
+</div>
+
+<script>
+  let selected = null;
+  function select(opt) {
+    ['a','b','c'].forEach(o => document.getElementById('opt-'+o).classList.remove('selected'));
+    selected = opt;
+    document.getElementById('opt-'+opt).classList.add('selected');
+    const titles = { a: 'A — Artilheiros + Classificação', b: 'B — Comparador de Times', c: 'C — Dashboard com Abas' };
+    document.getElementById('selection-text').innerHTML = 'Selecionado: <span>' + titles[opt] + '</span>';
+    // fire event for companion
+    try {
+      const e = new CustomEvent('brainstorm-select', { detail: { choice: opt, text: titles[opt] } });
+      window.dispatchEvent(e);
+    } catch(_) {}
+  }
+</script>
+
+</body>
+</html>
