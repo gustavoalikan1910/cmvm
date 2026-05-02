@@ -19,7 +19,7 @@ default_args = {
 def papermill_cmd(input_nb, params: dict) -> str:
     params_str = " ".join([f"-p {k} {v}" for k, v in params.items()])
     output_nb = input_nb.replace(".ipynb", "_output.ipynb")
-    return f"docker exec {JUPYTER_CONTAINER} papermill {NOTEBOOKS_BASE}/{input_nb} {NOTEBOOKS_BASE}/{output_nb} {params_str}"
+    return f"docker exec --user root {JUPYTER_CONTAINER} papermill {NOTEBOOKS_BASE}/{input_nb} {NOTEBOOKS_BASE}/{output_nb} {params_str}"
 
 with DAG(
     dag_id=f"cvmc_pipeline__{LEAGUE}__{SEASON}",
